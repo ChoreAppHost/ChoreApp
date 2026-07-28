@@ -248,6 +248,9 @@
   .kidmgr .krow:first-of-type{border-top:0}
   .kidmgr .kn{flex:1;font-size:13px}
   .code{font-family:var(--mono);font-size:14px;letter-spacing:.28em;color:var(--accent-ink);background:var(--bg);border:1px solid rgba(200,169,106,.3);padding:5px 10px}
+  .kid-code-actions{display:flex;gap:6px;margin-left:auto}
+  .kid-code-actions .ghost{padding:7px 9px;font-size:9px}
+  .kid-code-help{margin:-8px 0 10px}
   .req{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
   .req:first-of-type{border-top:0}
   .req .rq{flex:1;font-size:12px;color:var(--text);line-height:1.35}
@@ -256,6 +259,21 @@
   .toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);background:var(--surface-2);border:1px solid var(--line-strong);color:var(--text);font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:12px 18px;opacity:0;pointer-events:none;transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);z-index:20;max-width:90vw;text-align:center}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast b{color:var(--accent-ink)}
+
+  .settings-overlay{position:fixed;inset:0;z-index:calc(var(--z-nav) + 20);display:grid;place-items:center;padding:24px;background:rgba(5,5,7,.72);backdrop-filter:blur(8px)}
+  .settings-card{width:min(100%,480px);max-height:calc(100dvh - 48px);overflow:auto;background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line-strong);padding:30px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+  .settings-card h2{margin:5px 0 6px;font-family:var(--serif);font-size:24px}
+  .settings-role{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:8px}
+  .settings-rec{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 20px}
+  .settings-grid{display:grid;gap:14px}
+  .settings-check{display:flex;align-items:center;gap:12px;min-height:44px;color:var(--text);font-size:13px}
+  .settings-check input{width:18px;height:18px;accent-color:var(--accent)}
+  .settings-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:22px}
+  .settings-actions .recommended{grid-column:1/-1}
+  .settings-actions button{min-height:44px}
+  .app.compact li.task{padding-block:10px}
+  .app.compact .panel{padding-block:18px;margin-bottom:18px}
+  .app.compact .reward{padding-block:9px}
 
   /* KID APP */
   .kidhero{text-align:center;padding:30px 0 10px}
@@ -479,6 +497,9 @@
     .notice{gap:8px}
     .notice button{min-width:44px;min-height:44px}
     .kidmgr .krow,.req{flex-wrap:wrap}
+    .kidmgr .kn{flex-basis:100%}
+    .kid-code-actions{width:100%;margin-left:0}
+    .kid-code-actions .ghost{flex:1;min-height:44px}
     .code{min-height:44px;display:grid;place-items:center}
     .toast{bottom:calc(16px + env(safe-area-inset-bottom));width:calc(100vw - 32px);max-width:420px}
     .hero{padding-top:48px}
@@ -487,6 +508,10 @@
     .perk{align-items:flex-start;flex-wrap:wrap;gap:8px 14px}
     .perk .pn{flex-basis:calc(100% - 50px)}
     .foot-nav{gap:14px 20px}
+    .settings-overlay{place-items:end center;padding:0}
+    .settings-card{width:100%;max-height:calc(100dvh - env(safe-area-inset-top));padding:26px 18px calc(22px + env(safe-area-inset-bottom))}
+    .settings-actions{grid-template-columns:1fr}
+    .settings-actions .recommended{grid-column:auto}
   }
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -710,6 +735,7 @@
       <div class="persona" id="personaWrap"><label>Acting as</label><select id="personaSel"></select></div>
       <div class="balbadge"><b id="balNum">0</b>&nbsp;PTS</div>
       <div class="avatar" id="avatar">R</div>
+      <button class="ghost" id="openSettings" type="button">Settings</button>
       <button class="ghost" id="signout">Sign&nbsp;Out</button>
     </div>
   </div>
@@ -751,8 +777,9 @@
       <div class="panel" id="kidPanel">
         <div class="eyebrow">Child accounts</div>
         <div class="phead"><h2>Kids &amp; codes</h2></div>
+        <div id="kidCodeHelp" class="owner-note kid-code-help"></div>
         <div class="kidmgr" id="kidMgr"></div>
-        <div style="margin-top:16px"><button class="ghost" id="addKidBtn">+ Add a kid</button></div>
+        <div id="addKidWrap" style="margin-top:16px"><button class="ghost" id="addKidBtn">+ Add a kid</button></div>
         <div id="reqWrap"></div>
         <div id="kidRewardAdmin" class="reward-admin hidden">
           <div class="eyebrow">Kid rewards · owner controls</div>
@@ -793,6 +820,7 @@
     <div class="user">
       <div class="who" style="text-align:right;line-height:1.3"><div style="font-size:13px" id="kidName">Kid</div><div style="font-family:var(--mono);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)">Kid mode</div></div>
       <div class="avatar" id="kidAvatar">K</div>
+      <button class="ghost" id="kidOpenSettings" type="button">Settings</button>
       <button class="ghost" id="kidSignout">Exit</button>
     </div>
   </div>
@@ -815,12 +843,32 @@
   </div>
 </div>
 
+<div id="settingsDialog" class="settings-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <form id="settingsForm" class="settings-card" autocomplete="off">
+    <div class="eyebrow">User settings</div>
+    <h2 id="settingsTitle">Profile preferences</h2>
+    <div id="settingsRole" class="settings-role"></div>
+    <p id="settingsRecommendation" class="settings-rec"></p>
+    <div class="settings-grid">
+      <div class="field"><label for="settingsTheme">Theme</label><select id="settingsTheme"><option value="dark">Dark</option><option value="light">Light &amp; playful</option></select></div>
+      <div class="field"><label for="settingsDensity">Task spacing</label><select id="settingsDensity"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
+      <div class="field"><label for="settingsStartView">Default task view</label><select id="settingsStartView"></select></div>
+      <label class="settings-check"><input id="settingsRejections" type="checkbox" /> Show rejected-chore notices on login</label>
+    </div>
+    <div class="settings-actions">
+      <button id="applyRecommended" class="ghost recommended" type="button">Apply recommended settings</button>
+      <button id="closeSettings" class="ghost" type="button">Cancel</button>
+      <button class="btn" type="submit" style="margin:0">Save settings</button>
+    </div>
+  </form>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 (function(){
   "use strict";
-  var K={p:"meridian.profile.v3",m:"meridian.members.v3",t:"meridian.tasks.v3",r:"meridian.rewardclaims.v3",kc:"meridian.kidcodes.v3",rq:"meridian.rewardreqs.v3",rw:"meridian.rewards.v1",krw:"meridian.kidrewards.v1",n:"meridian.notifications.v1",theme:"meridian.theme.v1"};
+  var K={p:"meridian.profile.v3",m:"meridian.members.v3",t:"meridian.tasks.v3",r:"meridian.rewardclaims.v3",kc:"meridian.kidcodes.v3",rq:"meridian.rewardreqs.v3",rw:"meridian.rewards.v1",krw:"meridian.kidrewards.v1",n:"meridian.notifications.v1",theme:"meridian.theme.v1",us:"meridian.usersettings.v1"};
 
   var PRIOS=["low","med","high"], PLABEL={low:"Low",med:"Medium",high:"High"}, PTS={low:10,med:20,high:30};
   function pointsFor(p){return PTS[p]||10;}
@@ -869,7 +917,7 @@
     }).filter(Boolean);
   }
 
-  var S={ profile:null, members:[], tasks:[], claims:{}, kidCodes:{}, reqs:[], rewards:[], kidRewards:[], notifications:[], persona:null, filter:"all", kid:null };
+  var S={ profile:null, members:[], tasks:[], claims:{}, kidCodes:{}, reqs:[], rewards:[], kidRewards:[], notifications:[], userSettings:{}, persona:null, filter:"all", kid:null };
 
   function save(){
     try{
@@ -882,13 +930,14 @@
       localStorage.setItem(K.rw,JSON.stringify(S.rewards));
       localStorage.setItem(K.krw,JSON.stringify(S.kidRewards));
       localStorage.setItem(K.n,JSON.stringify(S.notifications));
+      localStorage.setItem(K.us,JSON.stringify(S.userSettings));
     }catch(e){}
   }
   function clearExistingUserDataOnce(){
     var resetKey="meridian.userdata.reset.2026-07-28.2";
     try{
       if(localStorage.getItem(resetKey)) return;
-      [K.p,K.m,K.t,K.r,K.kc,K.rq,K.rw,K.krw,K.n,"meridian.auth.v1"].forEach(function(key){ localStorage.removeItem(key); });
+      [K.p,K.m,K.t,K.r,K.kc,K.rq,K.rw,K.krw,K.n,K.us,"meridian.auth.v1"].forEach(function(key){ localStorage.removeItem(key); });
       localStorage.setItem(resetKey,"complete");
     }catch(e){}
   }
@@ -901,6 +950,7 @@
     S.rewards=normalizeRewards(readJSON(K.rw,null),DEFAULT_REWARDS);
     S.kidRewards=normalizeRewards(readJSON(K.krw,null),DEFAULT_KID_REWARDS);
     S.notifications=readJSON(K.n,[]); if(!Array.isArray(S.notifications)) S.notifications=[];
+    S.userSettings=readJSON(K.us,{}); if(!S.userSettings||Array.isArray(S.userSettings)) S.userSettings={};
   }
 
   var $=function(s){return document.querySelector(s);};
@@ -919,6 +969,8 @@
   }
   function saveTheme(theme){
     try{localStorage.setItem(K.theme,theme);}catch(e){}
+    var member=S.kid||(S.persona?mById(S.persona):null);
+    if(member){ var settings=getUserSettings(member); settings.theme=theme; S.userSettings[member.id]=settings; save(); }
     applyTheme(theme);
   }
   var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -954,6 +1006,7 @@
   }
   function renderNotifications(member,containerId){
     var wrap=$("#"+containerId); wrap.innerHTML="";
+    if(!getUserSettings(member).rejectionAlerts){wrap.classList.add("hidden");return;}
     var unread=S.notifications.filter(function(n){return n.memberId===member.id&&!n.read;});
     wrap.classList.toggle("hidden",!unread.length);
     unread.forEach(function(notification){
@@ -1017,6 +1070,66 @@
 
   // ---------- rewards ----------
   function isOwner(){ return !!(S.persona&&current()&&current().isYou); }
+  function accountType(member){ return member&&member.isKid?"Kid":(member&&member.isYou?"Owner":"Adult"); }
+  function recommendedSettings(member){
+    var role=accountType(member);
+    return {
+      theme:role==="Kid"?"light":readTheme(),
+      density:role==="Adult"?"compact":"comfortable",
+      startView:role==="Owner"&&S.profile&&S.profile.mode!=="solo"?"verify":"active",
+      rejectionAlerts:true
+    };
+  }
+  function getUserSettings(member){
+    var rec=recommendedSettings(member),raw=(member&&S.userSettings[member.id])||{};
+    return {
+      theme:raw.theme==="light"||raw.theme==="dark"?raw.theme:rec.theme,
+      density:raw.density==="compact"||raw.density==="comfortable"?raw.density:rec.density,
+      startView:["all","active","verify","done"].indexOf(raw.startView)>=0?raw.startView:rec.startView,
+      rejectionAlerts:raw.rejectionAlerts!==false
+    };
+  }
+  function settingsRecommendationText(member){
+    var role=accountType(member);
+    if(role==="Owner") return "Recommended: comfortable spacing, the verification queue in shared households, and rejection alerts enabled.";
+    if(role==="Kid") return "Recommended: the playful light theme, comfortable spacing, active chores first, and rejection alerts enabled.";
+    return "Recommended: compact spacing, active chores first, and rejection alerts enabled.";
+  }
+  function applyMemberSettings(member){
+    if(!member) return;
+    var settings=getUserSettings(member);
+    try{localStorage.setItem(K.theme,settings.theme);}catch(e){}
+    applyTheme(settings.theme);
+    $("#app").classList.toggle("compact",!member.isKid&&settings.density==="compact");
+    $("#kidapp").classList.toggle("compact",member.isKid&&settings.density==="compact");
+    if(!member.isKid){
+      S.filter=settings.startView;
+      document.querySelectorAll(".filters button").forEach(function(button){button.classList.toggle("on",button.dataset.f===S.filter);});
+    }
+  }
+  var settingsTarget=null,settingsReturnFocus=null;
+  function fillSettingsForm(member,settings){
+    $("#settingsTheme").value=settings.theme;
+    $("#settingsDensity").value=settings.density;
+    var start=$("#settingsStartView"); start.innerHTML="";
+    var choices=member.isKid?[["active","Active chores"],["all","All chores"]]:[["all","All chores"],["active","Active chores"],["verify","Needs verification"],["done","Completed"]];
+    choices.forEach(function(choice){var option=document.createElement("option");option.value=choice[0];option.textContent=choice[1];start.appendChild(option);});
+    start.value=settings.startView;
+    $("#settingsRejections").checked=settings.rejectionAlerts;
+  }
+  function openUserSettings(member,trigger){
+    settingsTarget=member; settingsReturnFocus=trigger||null;
+    $("#settingsRole").textContent=accountType(member)+" account · "+member.name;
+    $("#settingsRecommendation").textContent=settingsRecommendationText(member);
+    fillSettingsForm(member,getUserSettings(member));
+    $("#settingsDialog").classList.remove("hidden");
+    try{$("#settingsTheme").focus();}catch(e){}
+  }
+  function closeUserSettings(){
+    $("#settingsDialog").classList.add("hidden"); settingsTarget=null;
+    try{if(settingsReturnFocus) settingsReturnFocus.focus();}catch(e){} settingsReturnFocus=null;
+  }
+  function applyRecommendedSettings(){ if(settingsTarget) fillSettingsForm(settingsTarget,recommendedSettings(settingsTarget)); }
   function rewardName(value){ return String(value||"").trim().replace(/\s+/g," ").slice(0,80); }
   function rewardCost(value){ var cost=Math.round(Number(value)); return Number.isFinite(cost)&&cost>=1&&cost<=100000?cost:0; }
   function rewardCatalog(kind){ return kind==="kid"?S.kidRewards:S.rewards; }
@@ -1084,9 +1197,27 @@
     S.members.push(kid); var code=genCode(); S.kidCodes[code]=kid.id; kid.code=code;
     save(); return kid;
   }
-  function regenCode(kid){
+  function codeForKid(kid){
+    if(kid.code&&S.kidCodes[kid.code]===kid.id) return kid.code;
+    for(var c in S.kidCodes){ if(S.kidCodes[c]===kid.id){ kid.code=c; return c; } }
+    return "";
+  }
+  function regenerateKidCode(kid){
+    if(!isOwner()){ flash("Only the household owner can manage kid codes"); return; }
+    var old=codeForKid(kid);
+    if(old&&window.confirm&&!window.confirm("Replace "+kid.name+"’s current code? The old code will stop working.")) return;
     for(var c in S.kidCodes){ if(S.kidCodes[c]===kid.id) delete S.kidCodes[c]; }
     var nc=genCode(); S.kidCodes[nc]=kid.id; kid.code=nc; save(); renderAll();
+    flash((old?"New":"Kid")+" code · <b>"+nc+"</b>");
+  }
+  function copyKidCode(kid){
+    if(!isOwner()){ flash("Only the household owner can manage kid codes"); return; }
+    var code=codeForKid(kid);
+    if(!code){ regenerateKidCode(kid); return; }
+    function copied(){ flash(kid.name+"’s code copied · <b>"+code+"</b>"); }
+    if(typeof navigator!=="undefined"&&navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(copied).catch(function(){ flash(kid.name+"’s code · <b>"+code+"</b>"); });
+    } else { flash(kid.name+"’s code · <b>"+code+"</b>"); }
   }
 
   // ---------- rendering: task row ----------
@@ -1196,14 +1327,26 @@
     if(S.profile.mode!=="family"){ panel.classList.add("hidden"); return; }
     panel.classList.remove("hidden");
     var mgr=$("#kidMgr"); mgr.innerHTML="";
+    var owner=isOwner();
+    $("#addKidWrap").classList.toggle("hidden",!owner);
+    $("#kidCodeHelp").textContent=owner?"Generate a private login code for each child. Regenerating immediately disables the old code.":"The household owner manages child login codes.";
     var ks=kids();
     if(!ks.length){ var e=document.createElement("div"); e.style.cssText="color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:6px 0"; e.textContent="No kids yet"; mgr.appendChild(e); }
     ks.forEach(function(kid){
       var row=document.createElement("div"); row.className="krow";
       var nm=document.createElement("span"); nm.className="kn"; nm.textContent=kid.name+" · "+(kid.pts||0)+" pts";
-      var code=document.createElement("span"); code.className="code"; code.textContent=kid.code||"—";
-      var re=document.createElement("button"); re.className="ghost"; re.textContent="New code"; re.title="Regenerate"; re.addEventListener("click",function(){regenCode(kid);});
-      row.appendChild(nm); row.appendChild(code); row.appendChild(re); mgr.appendChild(row);
+      row.appendChild(nm);
+      if(owner){
+        var currentCode=codeForKid(kid);
+        var code=document.createElement("span"); code.className="code"; code.textContent=currentCode||"No code"; code.setAttribute("aria-label",kid.name+" login code "+(currentCode||"not generated"));
+        var actions=document.createElement("div"); actions.className="kid-code-actions";
+        if(currentCode){
+          var copy=document.createElement("button"); copy.className="ghost"; copy.textContent="Copy"; copy.setAttribute("aria-label","Copy code for "+kid.name); copy.title="Copy code"; copy.addEventListener("click",function(){copyKidCode(kid);}); actions.appendChild(copy);
+        }
+        var generate=document.createElement("button"); generate.className="ghost"; generate.textContent=currentCode?"Regenerate":"Generate code"; generate.setAttribute("aria-label",(currentCode?"Regenerate":"Generate")+" code for "+kid.name); generate.addEventListener("click",function(){regenerateKidCode(kid);}); actions.appendChild(generate);
+        row.appendChild(code); row.appendChild(actions);
+      }
+      mgr.appendChild(row);
     });
     // pending kid reward requests
     var rw=$("#reqWrap"); rw.innerHTML="";
@@ -1277,6 +1420,7 @@
     renderNotifications(kid,"kidNotifications");
     var list=$("#kidList"); list.innerHTML="";
     var mine=S.tasks.filter(function(t){return t.assigneeId===kid.id;});
+    if(getUserSettings(kid).startView==="active") mine=mine.filter(function(t){return t.status!=="done";});
     if(!mine.length){ var e=document.createElement("div"); e.className="empty"; e.textContent="No chores assigned"; list.appendChild(e); }
     mine.forEach(function(task){
       var li=document.createElement("li"); li.className="task"+(task.status==="done"?" done":"")+(task.status==="pending"?" pending":"");
@@ -1338,8 +1482,8 @@
 
   // ---------- screen switching ----------
   function show(id){ ["home","login","setup","app","kidapp"].forEach(function(s){ $("#"+s).classList.toggle("hidden",s!==id); }); window.scrollTo(0,0); }
-  function enterApp(memberId){ S.persona=memberId||you().id; show("app"); renderAll(); }
-  function enterKid(kid){ S.kid=kid; show("kidapp"); renderKid(); }
+  function enterApp(memberId){ S.persona=memberId||you().id; S.kid=null; applyMemberSettings(current()); show("app"); renderAll(); }
+  function enterKid(kid){ S.kid=kid; S.persona=null; applyMemberSettings(kid); show("kidapp"); renderKid(); }
 
   // ---- per-member PIN login (local-only; no session is persisted) ----
   var pinTarget=null;
@@ -1437,6 +1581,23 @@
   document.querySelectorAll(".filters button").forEach(function(b){ b.addEventListener("click",function(){ S.filter=b.dataset.f; document.querySelectorAll(".filters button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); renderTasks(); }); });
   $("#clearDone").addEventListener("click",function(){ S.tasks=S.tasks.filter(function(t){return t.status!=="done";}); save(); renderAll(); });
 
+  $("#openSettings").addEventListener("click",function(){ openUserSettings(current(),this); });
+  $("#kidOpenSettings").addEventListener("click",function(){ if(S.kid) openUserSettings(S.kid,this); });
+  $("#applyRecommended").addEventListener("click",applyRecommendedSettings);
+  $("#closeSettings").addEventListener("click",closeUserSettings);
+  $("#settingsForm").addEventListener("submit",function(ev){
+    ev.preventDefault(); if(!settingsTarget) return;
+    S.userSettings[settingsTarget.id]={
+      theme:$("#settingsTheme").value,
+      density:$("#settingsDensity").value,
+      startView:$("#settingsStartView").value,
+      rejectionAlerts:$("#settingsRejections").checked
+    };
+    var member=settingsTarget; save(); applyMemberSettings(member); closeUserSettings();
+    if(member.isKid) renderKid(); else renderAll();
+    flash("Settings saved for <b>"+member.name+"</b>");
+  });
+
   $("#rewardForm").addEventListener("submit",function(ev){
     ev.preventDefault();
     if(addReward("adult",$("#rewardName").value,$("#rewardCost").value)){ $("#rewardName").value=""; $("#rewardCost").value=""; }
@@ -1445,7 +1606,7 @@
     ev.preventDefault();
     if(addReward("kid",$("#kidRewardName").value,$("#kidRewardCost").value)){ $("#kidRewardName").value=""; $("#kidRewardCost").value=""; }
   });
-  $("#addKidBtn").addEventListener("click",function(){ var k=addKid("Kid "+(kids().length+1)); flash("Kid added · code <b>"+k.code+"</b>"); renderAll(); });
+  $("#addKidBtn").addEventListener("click",function(){ if(!isOwner()){flash("Only the household owner can add kids");return;} var k=addKid("Kid "+(kids().length+1)); flash("Kid added · code <b>"+k.code+"</b>"); renderAll(); });
   $("#signout").addEventListener("click",function(){ S.persona=null; $("#kidcode").value=""; renderLogin(); show("login"); });
   $("#kidSignout").addEventListener("click",function(){ S.kid=null; $("#kidcode").value=""; renderLogin(); show("login"); });
   $("#themeToggle").addEventListener("click",function(){
