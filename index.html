@@ -401,29 +401,26 @@
   .perk .pc{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--accent-ink);white-space:nowrap}
 
   .proof{padding-block:clamp(64px,9vh,108px)}
-  .proof-grid{display:grid;gap:clamp(28px,4vw,52px);grid-template-columns:1fr;align-items:start}
-  @media(min-width:900px){.proof-grid{grid-template-columns:1fr .82fr}}
-  .quote .q{font-family:var(--serif);font-size:clamp(1.5rem,1.1rem+1.5vw,2.15rem);line-height:1.28;letter-spacing:-.01em;text-wrap:balance;margin:0}
-  .quote .q .em{color:var(--accent-ink)}
-  .quote .attr{margin-top:26px;display:flex;align-items:center;gap:14px}
-  .quote .avatar{width:40px;height:40px;border:1px solid var(--line-strong);display:grid;place-items:center;font-family:var(--serif);font-size:15px;color:var(--accent-ink);background:var(--surface)}
-  .quote .who{line-height:1.35}
-  .quote .who .n{font-size:14px}
-  .quote .who .r{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
-  .vignette{border:1px solid var(--line);background:linear-gradient(180deg,var(--surface-2),var(--surface));padding:24px 22px;position:relative}
-  .vignette::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line-strong)}
-  .vignette .vh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px}
-  .vignette .vh .t{font-family:var(--serif);font-size:15px}
-  .vignette .vh .tier{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-ink);border:1px solid rgba(200,169,106,.35);padding:4px 8px}
-  .lb{list-style:none;margin:0;padding:0}
-  .lb li{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
-  .lb li:first-child{border-top:0}
-  .lb .rank{font-family:var(--mono);font-size:11px;color:var(--faint);width:22px}
-  .lb li.lead-row .rank{color:var(--accent-ink)}
-  .lb .nm{flex:1;font-size:13px}
-  .lb .bp{font-family:var(--mono);font-size:11px;color:var(--muted)}
-  .lb li.mine{background:linear-gradient(90deg,var(--accent-soft),transparent 60%);margin-inline:-22px;padding-inline:22px}
-  .lb .you{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink);border:1px solid rgba(200,169,106,.35);padding:1px 5px;margin-left:8px}
+  .review-head{display:grid;gap:24px;margin-bottom:clamp(30px,4vw,48px)}
+  @media(min-width:720px){.review-head{grid-template-columns:1fr auto;align-items:end}}
+  .review-head h2{font-size:clamp(1.9rem,1.3rem+2.4vw,3rem);letter-spacing:-.02em;line-height:1.06}
+
+  .rating-summary{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);background:var(--surface)}
+  .rating-summary strong{font-family:var(--serif);font-size:38px;line-height:1;color:var(--text)}
+  .rating-copy{display:grid;gap:3px}
+  .stars{color:var(--accent-ink);letter-spacing:.12em;white-space:nowrap}
+  .rating-copy span:last-child{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .review-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:720px){.review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(min-width:1040px){.review-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .review-card{margin:0;display:flex;flex-direction:column;min-height:210px;padding:24px 22px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .review-card .stars{font-size:13px}
+  .review-card blockquote{margin:20px 0 24px;font-family:var(--serif);font-size:18px;line-height:1.45;color:var(--text)}
+  .review-card figcaption{margin-top:auto;display:flex;align-items:end;justify-content:space-between;gap:14px}
+  .review-person{display:grid;gap:3px}
+  .review-name{font-size:14px;color:var(--text)}
+  .review-role{font-size:11px;color:var(--muted)}
+
 
   .final{padding-block:clamp(80px,12vh,150px);text-align:center;position:relative;overflow:hidden}
   .final::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(680px 340px at 50% 40%, rgba(200,169,106,.12), transparent 60%)}
@@ -644,22 +641,18 @@
 
   <section class="proof" aria-labelledby="proof-heading">
     <div class="wrap">
-      <h2 id="proof-heading" class="eyebrow" style="margin-bottom:clamp(30px,4vw,48px)">From the residence</h2>
-      <div class="proof-grid">
-        <figure class="quote reveal" style="margin:0">
-          <blockquote class="q">&ldquo;The nagging just <span class="em">stopped.</span> Nobody can fake a chore anymore &mdash; someone has to sign off &mdash; and the flat has never been this clean.&rdquo;</blockquote>
-          <figcaption class="attr"><span class="avatar" aria-hidden="true">M</span><span class="who"><span class="n">Mara</span><span class="r">Household lead &middot; four residents</span></span></figcaption>
-        </figure>
-        <div class="vignette reveal" role="img" aria-label="Household leaderboard: Mara 340 points, Theo 275, Priya 190, You 165, Sofia 120. Household tier Silver.">
-          <div class="vh"><span class="t">This week&rsquo;s standings</span><span class="tier">Silver</span></div>
-          <ul class="lb">
-            <li class="lead-row"><span class="rank">01</span><span class="nm">Mara</span><span class="bp">340 pts</span></li>
-            <li><span class="rank">02</span><span class="nm">Theo</span><span class="bp">275 pts</span></li>
-            <li><span class="rank">03</span><span class="nm">Priya</span><span class="bp">190 pts</span></li>
-            <li class="mine"><span class="rank">04</span><span class="nm">You<span class="you">You</span></span><span class="bp">165 pts</span></li>
-            <li><span class="rank">05</span><span class="nm">Sofia</span><span class="bp">120 pts</span></li>
-          </ul>
-        </div>
+      <div class="review-head reveal">
+        <div><span class="eyebrow">Household feedback</span><h2 id="proof-heading">Small routines. Noticeable relief.</h2></div>
+        <div class="rating-summary" aria-label="Overall rating 4.7 out of 5 from 7 reviews"><strong id="reviewRating">4.7</strong><span class="rating-copy"><span class="stars" aria-hidden="true">★★★★★</span><span>7 reviews</span></span></div>
+      </div>
+      <div class="review-grid" aria-label="Reviews">
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;The approval step finally made chores feel fair. Everyone knows what counts as finished.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Darryl</span><span class="review-role">Family owner</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;My kids check their own list now, and the points make reminders feel far less repetitive.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Maya</span><span class="review-role">Parent account</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;We stopped debating whose turn it was. The shared roster keeps our apartment honest.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Jordan</span><span class="review-role">Roommate household</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;The reward editor is simple enough that our perks actually match what motivates us.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Elena</span><span class="review-role">Couple account</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;Kid mode is clear, quick, and doesn&rsquo;t bury the chores under a bunch of settings.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Marcus</span><span class="review-role">Teen account</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="4"><div class="stars" aria-label="4 out of 5 stars">★★★★☆</div><blockquote>&ldquo;Setup took a few minutes, but our morning cleanup is much calmer now.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Priya</span><span class="review-role">Busy household</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="4"><div class="stars" aria-label="4 out of 5 stars">★★★★☆</div><blockquote>&ldquo;The code login works well for shared devices, and the verification queue keeps things organized.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Sofia</span><span class="review-role">Shared family tablet</span></span></figcaption></figure>
       </div>
     </div>
   </section>
