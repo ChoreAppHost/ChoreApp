@@ -118,8 +118,9 @@
   .sub{color:var(--muted);font-size:13px;margin-bottom:26px}
   .sub b{color:var(--accent-ink);font-weight:600}
 
-  .workspace{display:grid;grid-template-columns:1fr;gap:44px}
-  @media(min-width:900px){.workspace{grid-template-columns:1.65fr .9fr;gap:52px;align-items:start}}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr);gap:44px}
+  .workspace>*{min-width:0}
+  @media(min-width:900px){.workspace{grid-template-columns:minmax(0,1.65fr) minmax(0,.9fr);gap:52px;align-items:start}}
 
   .add{display:flex;border:1px solid var(--line);margin-bottom:8px;background:var(--surface)}
   .add input{flex:1;background:transparent;border:0;outline:none;color:var(--text);font-size:14px;padding:15px 16px}
@@ -509,6 +510,15 @@
     .settings-card{width:100%;max-height:calc(100dvh - env(safe-area-inset-top));padding:26px 18px calc(22px + env(safe-area-inset-bottom))}
     .settings-actions{grid-template-columns:1fr}
     .settings-actions .recommended{grid-column:auto}
+    .addopts{gap:12px}
+    .addopt{width:100%;justify-content:space-between}
+    .addopt.chk{width:100%;justify-content:flex-start}
+    .addopt>span{flex:0 0 auto}
+    .addopt select,.addopt input[type=date],.addopt input[type=number]{flex:1 1 auto;min-width:0;width:auto;min-height:44px}
+    #penaltyValue{flex:1 1 auto;width:auto!important}
+    .punishrow{gap:8px 10px}
+    .punchk{width:100%}
+    .punsel{flex:1 1 140px;min-width:0;min-height:44px}
   }
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
