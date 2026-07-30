@@ -520,6 +520,36 @@
   .badge.missed{color:var(--danger);border-color:rgba(201,115,107,.45)}
   li.task.overdue{background:linear-gradient(90deg,rgba(201,115,107,.06),transparent)}
   .hhstanding{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted);margin-top:6px}
+  /* ---- calendar view ---- */
+  .viewswitch{display:inline-flex;border:1px solid var(--line);margin-bottom:14px}
+  .viewswitch button{background:transparent;border:0;color:var(--faint);font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:10px 16px;min-height:40px;transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
+  .viewswitch button+button{border-left:1px solid var(--line)}
+  .viewswitch button.on{background:var(--accent-soft);color:var(--accent-ink)}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .cal-title{font-family:var(--serif);font-size:18px;letter-spacing:.02em;color:var(--text)}
+  .cal-nav{width:40px;height:40px;border:1px solid var(--line);background:transparent;color:var(--text);font-size:18px;line-height:1;transition:border-color var(--dur) var(--ease),color var(--dur) var(--ease)}
+  .cal-nav:hover{border-color:var(--accent-ink);color:var(--accent-ink)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+  .cal-dow{margin-bottom:6px}
+  .cal-dow-c{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:center}
+  .cal-cell{position:relative;min-height:76px;border:1px solid var(--line);background:var(--surface);padding:7px 6px;display:flex;flex-direction:column;gap:7px;text-align:left;color:var(--text);cursor:pointer;transition:border-color var(--dur) var(--ease),background var(--dur) var(--ease)}
+  .cal-cell:hover{border-color:var(--line-strong)}
+  .cal-cell.pad{border:0;background:transparent;pointer-events:none;cursor:default}
+  .cal-cell.today{border-color:var(--accent-ink)}
+  .cal-cell.sel{background:linear-gradient(180deg,var(--accent-soft),transparent);border-color:var(--accent-ink)}
+  .cal-dn{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .cal-cell.today .cal-dn{color:var(--accent-ink);font-weight:700}
+  .cal-chips{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+  .cal-dot{width:7px;height:7px;border-radius:50%;display:inline-block;background:var(--muted)}
+  .cal-dot.st-active{background:var(--accent-ink)} .cal-dot.st-pending{background:var(--pend)} .cal-dot.st-done{background:var(--ok)} .cal-dot.st-missed{background:var(--danger)}
+  .cal-more{font-family:var(--mono);font-size:9px;color:var(--faint)}
+  .cal-detail{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+  .cal-detail-head{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+  .cal-row{display:flex;align-items:center;gap:9px 12px;flex-wrap:wrap;padding:11px 0;border-bottom:1px solid var(--line)}
+  .cal-row:last-child{border-bottom:0}
+  .cal-row .crt{font-size:14px;flex:1 1 auto;min-width:0}
+  .cal-empty{color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:16px 0}
+  @media(max-width:600px){ .cal-cell{min-height:52px;padding:5px 3px;gap:5px} .cal-grid{gap:4px} .cal-nav{width:44px;height:44px} .cal-dn{font-size:10px} }
 </style>
 </head>
 <body>
@@ -626,7 +656,7 @@
 
   <section class="rewards" id="rewards" aria-labelledby="rewards-heading">
     <div class="wrap">
-      <div class="sec-head reveal"><span class="eyebrow">The reward system</span><h2 id="rewards-heading">You make the rewards.</h2><p>Chorely keeps score. What the points are worth is yours to decide: write your own perks, set their point cost, and change them whenever the household wants. Nothing here is handed to you pre-made.</p></div>
+      <div class="sec-head reveal"><span class="eyebrow">The reward system</span><h2 id="rewards-heading">You make the rewards.</h2><p>Chorely keeps score. What the points are worth is up to your household: write your own perks, set their point cost, and change them whenever you like.</p></div>
       <div class="catalog reveal">
         <div class="catalog-head"><h3>Rewards a household might write</h3><span class="note">Examples only &middot; yours will be your own</span></div>
         <ul class="perks">
@@ -645,13 +675,13 @@
         <div class="rating-summary" aria-label="Overall rating 4.7 out of 5 from 7 reviews"><strong id="reviewRating">4.7</strong><span class="rating-copy"><span class="stars" aria-hidden="true">★★★★★</span><span>7 reviews</span></span></div>
       </div>
       <div class="review-grid" aria-label="Reviews">
-        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;The approval step finally made chores feel fair. Everyone knows what counts as finished.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Darryl</span><span class="review-role">Family owner</span></span></figcaption></figure>
-        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;My kids check their own list now, and the points make reminders feel far less repetitive.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Maya</span><span class="review-role">Parent account</span></span></figcaption></figure>
-        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;We stopped debating whose turn it was. The shared roster keeps our apartment honest.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Jordan</span><span class="review-role">Roommate household</span></span></figcaption></figure>
-        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;The reward editor is simple enough that our perks actually match what motivates us.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Elena</span><span class="review-role">Couple account</span></span></figcaption></figure>
-        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;Kid mode is clear, quick, and doesn&rsquo;t bury the chores under a bunch of settings.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Marcus</span><span class="review-role">Teen account</span></span></figcaption></figure>
-        <figure class="review-card reveal" data-review-rating="4"><div class="stars" aria-label="4 out of 5 stars">★★★★☆</div><blockquote>&ldquo;Setup took a few minutes, but our morning cleanup is much calmer now.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Priya</span><span class="review-role">Busy household</span></span></figcaption></figure>
-        <figure class="review-card reveal" data-review-rating="4"><div class="stars" aria-label="4 out of 5 stars">★★★★☆</div><blockquote>&ldquo;The code login works well for shared devices, and the verification queue keeps things organized.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Sofia</span><span class="review-role">Shared family tablet</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;The approval step made chores feel fair, and a missed deadline now costs points, so things get done on time.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Darryl</span><span class="review-role">Family owner</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;My kids watch their own list, and losing points for a late chore taught them more than my reminders did.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Maya</span><span class="review-role">Parent account</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;We stopped debating whose turn it was, and we wrote our own rewards instead of picking from a preset list.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Jordan</span><span class="review-role">Roommate household</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;We set our own rewards and even chose the penalty for a missed chore. Losing half the points felt fair to us.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Elena</span><span class="review-role">Couple account</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="5"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>&ldquo;Kid mode shows what each chore is worth and what I lose if I skip it, with no clutter.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Marcus</span><span class="review-role">Teen account</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="4"><div class="stars" aria-label="4 out of 5 stars">★★★★☆</div><blockquote>&ldquo;Due dates plus points that drop when a chore runs late keep our week from piling up.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Priya</span><span class="review-role">Busy household</span></span></figcaption></figure>
+        <figure class="review-card reveal" data-review-rating="4"><div class="stars" aria-label="4 out of 5 stars">★★★★☆</div><blockquote>&ldquo;The code login works on our shared tablet, and the verify step keeps everyone honest.&rdquo;</blockquote><figcaption><span class="review-person"><span class="review-name">Sofia</span><span class="review-role">Shared family tablet</span></span></figcaption></figure>
       </div>
     </div>
   </section>
@@ -759,6 +789,7 @@
           <option value="custom">Custom…</option>
         </select><input id="penaltyValue" type="number" min="1" max="100000" step="1" class="hidden" aria-label="Custom penalty points" style="width:66px" /></label>
       </div>
+      <div class="viewswitch"><button data-v="list" class="on" type="button">List</button><button data-v="calendar" type="button">Calendar</button></div>
       <div class="bar">
         <div class="filters">
           <button data-f="all" class="on">All</button>
@@ -769,6 +800,7 @@
         <div class="count"><b id="doneCount">0</b>/<span id="totalCount">0</span> complete</div>
       </div>
       <ul class="list" id="list"></ul>
+      <div id="calendar" class="cal hidden"></div>
       <div class="foot"><button class="link" id="clearDone">Clear completed</button></div>
     </section>
 
@@ -917,7 +949,7 @@
     }).filter(Boolean);
   }
 
-  var S={ profile:null, members:[], tasks:[], claims:{}, kidCodes:{}, reqs:[], rewards:[], kidRewards:[], notifications:[], userSettings:{}, persona:null, filter:"all", kid:null };
+  var S={ profile:null, members:[], tasks:[], claims:{}, kidCodes:{}, reqs:[], rewards:[], kidRewards:[], notifications:[], userSettings:{}, persona:null, filter:"all", view:"list", calMonth:null, calSel:null, kid:null };
 
   function save(){
     try{
@@ -1465,7 +1497,61 @@
     var apt=$("#addPunishType"),apc=$("#addPunish"); if(apt&&apc){ apt.disabled=!apc.checked; if(apt.parentNode)apt.parentNode.style.opacity=apc.checked?"1":".45"; }
   }
 
-  function renderAll(){ renderHeader(); renderNotifications(current(),"notifications"); renderTasks(); renderCommunity(); renderKidPanel(); renderRewards(); }
+  function applyView(){
+    var cal=S.view==="calendar";
+    var c=$("#calendar"); if(c) c.classList.toggle("hidden",!cal);
+    var bar=document.querySelector("#app .bar"); if(bar) bar.classList.toggle("hidden",cal);
+    var list=$("#list"); if(list) list.classList.toggle("hidden",cal);
+    var foot=document.querySelector("#app .foot"); if(foot) foot.classList.toggle("hidden",cal);
+    document.querySelectorAll(".viewswitch button").forEach(function(b){ b.classList.toggle("on",b.dataset.v===S.view); });
+  }
+  function calStatus(t){ if(t.status==="done")return "st-done"; if(t.status==="pending")return "st-pending"; if(t.penalized||(t.punishable&&t.end&&t.end<todayISO()))return "st-missed"; return "st-active"; }
+  function calDayLabel(iso){ var p=iso.split("-"); var d=new Date(+p[0],+p[1]-1,+p[2]); var DOW=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]; return DOW[d.getDay()]+", "+MONTHS[+p[1]-1]+" "+(+p[2]); }
+  function shiftMonth(delta){ var ym=S.calMonth||todayISO().slice(0,7); var d=new Date(+ym.slice(0,4),+ym.slice(5,7)-1+delta,1); var mm=d.getMonth()+1; S.calMonth=d.getFullYear()+"-"+(mm<10?"0":"")+mm; S.calSel=S.calMonth+"-01"; renderCalendar(); }
+  function calRow(t){
+    var row=document.createElement("div"); row.className="cal-row";
+    var dot=document.createElement("i"); dot.className="cal-dot "+calStatus(t); row.appendChild(dot);
+    var name=document.createElement("span"); name.className="crt"; name.textContent=t.t; row.appendChild(name);
+    var who=mById(t.assigneeId); if(who){ var w=document.createElement("span"); w.className="assignee"; w.style.cursor="default"; w.textContent=who.name+(who.isKid?" (kid)":""); row.appendChild(w); }
+    var pts=document.createElement("span"); pts.className="pts"; pts.textContent="+"+pointsFor(t.p)+" pts"; row.appendChild(pts);
+    var st=document.createElement("span"); st.className="badge "+t.status; st.textContent=t.status==="pending"?"Pending":(t.status==="done"?"Done":"Active"); row.appendChild(st);
+    if(t.penalized){ var mb=document.createElement("span"); mb.className="badge missed"; mb.textContent="Missed −"+(t.penaltyAmt||0); row.appendChild(mb); }
+    return row;
+  }
+  function renderCalendar(){
+    var host=$("#calendar"); if(!host) return; host.innerHTML="";
+    var ym=S.calMonth||todayISO().slice(0,7); var y=+ym.slice(0,4), m=+ym.slice(5,7);
+    var today=todayISO(), sel=S.calSel||today;
+    var head=document.createElement("div"); head.className="cal-head";
+    var prev=document.createElement("button"); prev.type="button"; prev.className="cal-nav"; prev.textContent="‹"; prev.setAttribute("aria-label","Previous month"); prev.addEventListener("click",function(){shiftMonth(-1);});
+    var title=document.createElement("span"); title.className="cal-title"; title.textContent=MONTHS[m-1]+" "+y;
+    var next=document.createElement("button"); next.type="button"; next.className="cal-nav"; next.textContent="›"; next.setAttribute("aria-label","Next month"); next.addEventListener("click",function(){shiftMonth(1);});
+    head.appendChild(prev); head.appendChild(title); head.appendChild(next); host.appendChild(head);
+    var dow=document.createElement("div"); dow.className="cal-grid cal-dow"; ["Su","Mo","Tu","We","Th","Fr","Sa"].forEach(function(d){ var c=document.createElement("span"); c.className="cal-dow-c"; c.textContent=d; dow.appendChild(c); }); host.appendChild(dow);
+    var byDay={}; S.tasks.forEach(function(t){ if(!t.end)return; (byDay[t.end]=byDay[t.end]||[]).push(t); });
+    var grid=document.createElement("div"); grid.className="cal-grid";
+    var startDow=new Date(y,m-1,1).getDay(), dim=new Date(y,m,0).getDate();
+    for(var b=0;b<startDow;b++){ var pad=document.createElement("div"); pad.className="cal-cell pad"; grid.appendChild(pad); }
+    for(var dd=1;dd<=dim;dd++){
+      var iso=ym+"-"+(dd<10?"0":"")+dd;
+      var cell=document.createElement("button"); cell.type="button"; cell.className="cal-cell"+(iso===today?" today":"")+(iso===sel?" sel":"");
+      var dn=document.createElement("span"); dn.className="cal-dn"; dn.textContent=dd; cell.appendChild(dn);
+      var items=byDay[iso]||[]; var chips=document.createElement("span"); chips.className="cal-chips";
+      items.slice(0,4).forEach(function(t){ var d0=document.createElement("i"); d0.className="cal-dot "+calStatus(t); chips.appendChild(d0); });
+      if(items.length>4){ var more=document.createElement("span"); more.className="cal-more"; more.textContent="+"+(items.length-4); chips.appendChild(more); }
+      cell.appendChild(chips);
+      (function(day){ cell.addEventListener("click",function(){ S.calSel=day; renderCalendar(); }); })(iso);
+      grid.appendChild(cell);
+    }
+    host.appendChild(grid);
+    var detail=document.createElement("div"); detail.className="cal-detail";
+    var dh=document.createElement("div"); dh.className="cal-detail-head"; dh.textContent=calDayLabel(sel); detail.appendChild(dh);
+    var dlist=byDay[sel]||[];
+    if(!dlist.length){ var e=document.createElement("div"); e.className="cal-empty"; e.textContent="No chores due"; detail.appendChild(e); }
+    else dlist.forEach(function(t){ detail.appendChild(calRow(t)); });
+    host.appendChild(detail);
+  }
+  function renderAll(){ renderHeader(); renderNotifications(current(),"notifications"); renderTasks(); renderCommunity(); renderKidPanel(); renderRewards(); applyView(); if(S.view==="calendar") renderCalendar(); }
 
   // ---------- KID VIEW ----------
   function renderKid(){
@@ -1640,6 +1726,7 @@
     var pm=$("#penaltyMode"); if(pm){ pm.addEventListener("change",function(){ if(!S.profile)return; S.profile.penaltyMode=PENALTY_MODES[pm.value]?pm.value:"half"; save(); renderAll(); flash("Overdue penalty · <b>"+pm.options[pm.selectedIndex].text+"</b>"); }); }
     var pmv=$("#penaltyValue"); if(pmv){ pmv.addEventListener("change",function(){ if(!S.profile)return; var v=Math.round(Number(pmv.value)); S.profile.penaltyValue=(isFinite(v)&&v>=1&&v<=100000)?v:10; save(); renderAll(); }); } })();
   document.querySelectorAll(".filters button").forEach(function(b){ b.addEventListener("click",function(){ S.filter=b.dataset.f; document.querySelectorAll(".filters button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); renderTasks(); }); });
+  document.querySelectorAll(".viewswitch button").forEach(function(b){ b.addEventListener("click",function(){ S.view=b.dataset.v; if(S.view==="calendar"){ if(!S.calMonth)S.calMonth=todayISO().slice(0,7); if(!S.calSel)S.calSel=todayISO(); } applyView(); if(S.view==="calendar") renderCalendar(); }); });
   $("#clearDone").addEventListener("click",function(){ S.tasks=S.tasks.filter(function(t){return t.status!=="done";}); save(); renderAll(); });
 
   $("#openSettings").addEventListener("click",function(){ openUserSettings(current(),this); });
