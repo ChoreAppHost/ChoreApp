@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>CHORELY — The Chore Operating System</title>
-<meta name="description" content="Chorely turns household chores into a calm, points-based system for families, couples, and roommates. Schedule chores, verify each other's work, earn points together, climb tiers, and redeem real perks." />
+<meta name="description" content="Chorely turns household chores into a calm, points-based system for families, couples, and roommates. Schedule chores, verify each other's work, earn points together, and redeem rewards you set for yourselves." />
 <style>
   :root{
     color-scheme:dark;
@@ -19,7 +19,6 @@
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
     --serif:Georgia,"Times New Roman",serif;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    --bronze:#a9764b; --silver:#b9bcc4; --gold:#c8a96a; --plat:#dfe4ea;
     --z-nav:100; --edge:clamp(20px,5vw,64px);
   }
   html[data-theme="light"]{
@@ -31,7 +30,6 @@
     --danger:#a92f56; --ok:#397052; --pend:#7b571e;
     --glow-1:#ffdbe9; --glow-2:#ffe9f2; --focus-bg:#fff0f6;
     --nav-bg-1:rgba(255,247,251,.96); --nav-bg-2:rgba(255,247,251,.84); --on-accent:#160d12;
-    --bronze:#96633f; --silver:#70727b; --gold:#9f2f5a; --plat:#59616b;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -190,7 +188,6 @@
   .panel h2{margin:0;font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:.02em}
   .panel .eyebrow{margin-bottom:6px}
   .phead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
-  .tier{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-ink);border:1px solid rgba(200,169,106,.35);padding:4px 9px}
   .bigstat{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
   .bigstat .num{font-family:var(--serif);font-size:34px;color:var(--text);line-height:1}
   .bigstat .unit{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
@@ -327,7 +324,6 @@
   .hero-card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line-strong)}
   .hc-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
   .hc-head .t{font-family:var(--serif);font-size:15px}
-  .hc-head .tier{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-ink);border:1px solid rgba(200,169,106,.35);padding:4px 8px}
   .hc-row{display:flex;align-items:center;gap:13px;padding:12px 0;border-top:1px solid var(--line)}
   .hc-check{width:17px;height:17px;flex:0 0 auto;border:1px solid var(--line-strong);position:relative}
   .hc-row.done .hc-check{background:var(--accent);border-color:var(--accent-ink)}
@@ -374,22 +370,6 @@
   .rewards{padding-block:clamp(70px,10vh,120px);position:relative;overflow:hidden}
   .rewards::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(720px 360px at 50% 0%, rgba(200,169,106,.10), transparent 62%)}
   .rewards .wrap{position:relative}
-  .ladder{display:grid;gap:14px;grid-template-columns:1fr;margin-top:clamp(30px,4vw,50px)}
-  @media(min-width:680px){.ladder{grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line)}}
-  .rung{position:relative;padding:26px 22px 24px;border:1px solid var(--line);background:linear-gradient(180deg,var(--surface),var(--bg-2));display:flex;flex-direction:column;gap:6px;transition:transform var(--dur) var(--ease),background var(--dur) var(--ease)}
-  @media(min-width:680px){.rung{border:0;border-right:1px solid var(--line)}.rung:last-child{border-right:0}}
-  .rung:hover{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
-  .rung .cap{position:absolute;left:0;right:0;top:0;height:2px}
-  .rung.b .cap{background:var(--bronze)} .rung.s .cap{background:var(--silver)}
-  .rung.g .cap{background:var(--gold)} .rung.p .cap{background:var(--plat)}
-  .rung .tname{font-family:var(--serif);font-size:1.35rem;letter-spacing:.01em}
-  .rung.b .tname{color:var(--bronze)} .rung.s .tname{color:var(--silver)}
-  .rung.g .tname{color:var(--gold)} .rung.p .tname{color:var(--plat)}
-  .rung .thresh{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
-  .rung .fill{margin-top:14px;height:5px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
-  .rung .fill i{display:block;height:100%}
-  .rung.b .fill i{width:25%;background:var(--bronze)} .rung.s .fill i{width:50%;background:var(--silver)}
-  .rung.g .fill i{width:75%;background:var(--gold)} .rung.p .fill i{width:100%;background:var(--plat)}
   .catalog{margin-top:clamp(40px,5vw,64px)}
   .catalog-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
   .catalog-head h3{font-size:clamp(1.3rem,1rem+1vw,1.7rem);letter-spacing:-.01em}
@@ -556,7 +536,7 @@
     <nav class="nav-links" aria-label="Primary">
       <a href="#features">Features</a>
       <a href="#how">How it works</a>
-      <a href="#reward-tiers">Rewards</a>
+      <a href="#rewards">Rewards</a>
     </nav>
     <a class="cta nav-cta enter-cta" href="#">Enter Chorely <span class="arw" aria-hidden="true">&rarr;</span></a>
   </div>
@@ -573,7 +553,7 @@
           <span class="li">that runs</span>
           <span class="li"><span class="accent">itself.</span></span>
         </h1>
-        <p class="hero-sub">Chorely turns the chores nobody wants into a shared system with points, tiers, and real rewards &mdash; and nobody just <b>claims</b> a job is done: a partner, roommate, or parent verifies it first. <b>No nagging. No spreadsheets.</b></p>
+        <p class="hero-sub">Chorely turns the chores nobody wants into a shared system with points and rewards you set for yourselves &mdash; and nobody just <b>claims</b> a job is done: a partner, roommate, or parent verifies it first. <b>No nagging. No spreadsheets.</b></p>
         <div class="hero-actions">
           <a class="cta enter-cta" href="#">Enter Chorely <span class="arw" aria-hidden="true">&rarr;</span></a>
           <a class="cta-ghost" href="#how">See how it works</a>
@@ -581,7 +561,7 @@
         <p class="hero-note">Household operations, refined.</p>
       </div>
       <div class="hero-card reveal" role="img" aria-label="Preview of Chorely's daily roster showing chores with priorities and point values, and 640 points earned by the household this week.">
-        <div class="hc-head"><span class="t">Today&rsquo;s Roster</span><span class="tier">Silver</span></div>
+        <div class="hc-head"><span class="t">Today&rsquo;s Roster</span></div>
         <div class="hc-row done"><span class="hc-check" aria-hidden="true"></span><span class="hc-name">Run &amp; empty the dishwasher</span><span class="hc-pts">+20</span></div>
         <div class="hc-row"><span class="hc-check" aria-hidden="true"></span><span class="hc-name">Deep-clean the kitchen</span><span class="hc-pri high">High</span><span class="hc-pts">+30</span></div>
         <div class="hc-row"><span class="hc-check" aria-hidden="true"></span><span class="hc-name">Water the plants</span><span class="hc-pri">Med</span><span class="hc-pts">+20</span></div>
@@ -621,13 +601,13 @@
         </article>
         <article class="cell">
           <span class="k">Community points</span>
-          <h3>You climb, the household climbs.</h3>
-          <p>Points you earn count for you and the whole home, carrying everyone from Bronze up toward Platinum.</p>
+          <h3>Your points lift the whole home.</h3>
+          <p>Points you earn count for you and for the household&rsquo;s shared total, so the effort adds up for everyone.</p>
         </article>
         <article class="cell">
           <span class="k">Rewards catalog</span>
-          <h3>Spend points on real life.</h3>
-          <p>Trade points for perks that matter at home &mdash; movie pick, a lie-in, breakfast in bed, or skipping a chore. Kids request; a parent approves.</p>
+          <h3>Rewards you write yourself.</h3>
+          <p>You define every perk and its point cost: a movie pick, a lie-in, skipping a chore, whatever motivates your home. Kids request; a parent approves.</p>
         </article>
       </div>
     </div>
@@ -639,27 +619,20 @@
       <div class="steps reveal">
         <div class="step"><div class="no">1</div><h3>Add the chores</h3><p>Drop the household&rsquo;s recurring jobs onto one roster. Set a priority, a date window, and who&rsquo;s responsible.</p></div>
         <div class="step"><div class="no">2</div><h3>Finish &amp; verify</h3><p>Check a chore off and it goes pending. Someone else approves it &mdash; then the points land on your balance and the shared total.</p></div>
-        <div class="step"><div class="no">3</div><h3>Redeem together</h3><p>Climb the tiers as a home and spend points on rewards you actually want. Everyone wins from the same effort.</p></div>
+        <div class="step"><div class="no">3</div><h3>Redeem together</h3><p>Spend points on the rewards your household set for itself. Everyone wins from the same effort.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="rewards" id="reward-tiers" aria-labelledby="rewards-heading">
+  <section class="rewards" id="rewards" aria-labelledby="rewards-heading">
     <div class="wrap">
-      <div class="sec-head reveal"><span class="eyebrow">The reward system</span><h2 id="rewards-heading">Four tiers. One household.</h2><p>Every verified chore feeds a shared total. Cross a threshold and the whole home levels up, from Bronze to Platinum.</p></div>
-      <div class="ladder reveal" role="list" aria-label="Household tiers from Bronze to Platinum">
-        <div class="rung b" role="listitem"><span class="cap" aria-hidden="true"></span><span class="tname">Bronze</span><span class="thresh">From 0 pts</span><span class="fill" aria-hidden="true"><i></i></span></div>
-        <div class="rung s" role="listitem"><span class="cap" aria-hidden="true"></span><span class="tname">Silver</span><span class="thresh">300 pts</span><span class="fill" aria-hidden="true"><i></i></span></div>
-        <div class="rung g" role="listitem"><span class="cap" aria-hidden="true"></span><span class="tname">Gold</span><span class="thresh">700 pts</span><span class="fill" aria-hidden="true"><i></i></span></div>
-        <div class="rung p" role="listitem"><span class="cap" aria-hidden="true"></span><span class="tname">Platinum</span><span class="thresh">1,200 pts</span><span class="fill" aria-hidden="true"><i></i></span></div>
-      </div>
+      <div class="sec-head reveal"><span class="eyebrow">The reward system</span><h2 id="rewards-heading">You make the rewards.</h2><p>Chorely keeps score. What the points are worth is yours to decide: write your own perks, set their point cost, and change them whenever the household wants. Nothing here is handed to you pre-made.</p></div>
       <div class="catalog reveal">
-        <div class="catalog-head"><h3>From the rewards catalog</h3><span class="note">Points, spent on real perks</span></div>
+        <div class="catalog-head"><h3>Rewards a household might write</h3><span class="note">Examples only &middot; yours will be your own</span></div>
         <ul class="perks">
-          <li class="perk"><span class="pn">Pick Friday movie night<span class="pd">Household perk</span></span><span class="pc">80 pts</span></li>
-          <li class="perk"><span class="pn">Skip a chore this week<span class="pd">Personal perk</span></span><span class="pc">120 pts</span></li>
-          <li class="perk"><span class="pn">Weekend lie-in pass<span class="pd">Personal perk</span></span><span class="pc">150 pts</span></li>
-          <li class="perk"><span class="pn">Breakfast in bed voucher<span class="pd">Household perk</span></span><span class="pc">200 pts</span></li>
+          <li class="perk"><span class="pn">Friday movie pick<span class="pd">You decide the perk</span></span><span class="pc">You set the price</span></li>
+          <li class="perk"><span class="pn">Skip a chore this week<span class="pd">You decide the perk</span></span><span class="pc">You set the price</span></li>
+          <li class="perk"><span class="pn">A slow weekend morning<span class="pd">You decide the perk</span></span><span class="pc">You set the price</span></li>
         </ul>
       </div>
     </div>
@@ -686,7 +659,7 @@
   <section class="final" aria-labelledby="final-heading">
     <div class="wrap"><div class="inner reveal">
       <h2 id="final-heading">Run your home like it&rsquo;s <span class="accent">yours.</span></h2>
-      <p>Set up your roster, earn your first points, and watch the household climb. It takes a few minutes to start.</p>
+      <p>Set up your roster, earn your first points, and watch the shared total grow. It takes a few minutes to start.</p>
       <div class="act"><a class="cta enter-cta" href="#">Enter Chorely <span class="arw" aria-hidden="true">&rarr;</span></a><a class="cta-ghost" href="#features">Review the features</a></div>
     </div></div>
   </section>
@@ -695,7 +668,7 @@
 <footer>
   <div class="wrap foot-inner">
     <a class="mark" href="#top" aria-label="Chorely home">CHORELY<span class="dot">.</span></a>
-    <nav class="foot-nav" aria-label="Footer"><a href="#features">Features</a><a href="#how">How it works</a><a href="#reward-tiers">Rewards</a><a class="enter-cta" href="#">Enter</a></nav>
+    <nav class="foot-nav" aria-label="Footer"><a href="#features">Features</a><a href="#how">How it works</a><a href="#rewards">Rewards</a><a class="enter-cta" href="#">Enter</a></nav>
     <span class="foot-note">A demo experience &middot; data stays on your device</span>
   </div>
 </footer>
@@ -817,8 +790,8 @@
         <div id="addKidWrap" style="margin-top:16px"><button class="ghost" id="addKidBtn">+ Add a kid</button></div>
         <div id="reqWrap"></div>
         <div id="kidRewardAdmin" class="reward-admin hidden">
-          <div class="eyebrow">Kid rewards · owner controls</div>
-          <div class="owner-note">Changes apply to every child profile in this household.</div>
+          <div class="eyebrow">Your kids&rsquo; rewards · you set these</div>
+          <div class="owner-note">Write the kids&rsquo; rewards yourself. Whatever you add applies to every child profile.</div>
           <div id="ownerKidRewards" class="kid-reward-admin-list"></div>
           <form id="kidRewardForm" class="reward-create" autocomplete="off">
             <input id="kidRewardName" type="text" maxlength="80" placeholder="New kid reward" aria-label="New kid reward name" required />
@@ -834,8 +807,8 @@
         <div class="bigstat"><span class="num" id="balBig">0</span><span class="unit">pts to spend</span></div>
         <div class="statlabel" id="balWho">Your balance</div>
         <div id="rewardAdmin" class="reward-admin hidden">
-          <div class="eyebrow">Household rewards · owner controls</div>
-          <div class="owner-note">Changes apply to every adult profile in this household.</div>
+          <div class="eyebrow">Your household rewards · you set these</div>
+          <div class="owner-note">Write your household&rsquo;s rewards yourself. Whatever you add applies to every adult profile.</div>
           <form id="rewardForm" class="reward-create" autocomplete="off">
             <input id="rewardName" type="text" maxlength="80" placeholder="New household reward" aria-label="New household reward name" required />
             <input id="rewardCost" type="number" min="1" max="100000" step="1" placeholder="Points" aria-label="Household reward point cost" required />
@@ -914,22 +887,8 @@
   function penaltyFor(task){ var base=pointsFor(task.p),m=penaltyMode(); if(m==="full")return base; if(m==="custom")return Math.max(1,(S.profile&&S.profile.penaltyValue)||10); return Math.max(1,Math.round(base/2)); }
   function todayISO(){ var d=new Date(),mo=d.getMonth()+1,da=d.getDate(); return d.getFullYear()+"-"+(mo<10?"0":"")+mo+"-"+(da<10?"0":"")+da; }
 
-  var DEFAULT_REWARDS=[
-    {id:"r1",name:"Control the thermostat for a day",cost:60},
-    {id:"r2",name:"Pick Friday movie night",cost:80},
-    {id:"r3",name:"Choose Sunday dinner menu",cost:100},
-    {id:"r4",name:"Skip a chore this week",cost:120},
-    {id:"r5",name:"Weekend lie-in pass",cost:150},
-    {id:"r6",name:"Breakfast in bed voucher",cost:200}
-  ];
-  var DEFAULT_KID_REWARDS=[
-    {id:"k1",name:"Pick tonight's dessert",cost:30},
-    {id:"k2",name:"Extra 30 min screen time",cost:40},
-    {id:"k3",name:"Choose the weekend movie",cost:60},
-    {id:"k4",name:"Skip one chore",cost:80},
-    {id:"k5",name:"Trip to the park",cost:50},
-    {id:"k6",name:"Friend sleepover",cost:150}
-  ];
+  var DEFAULT_REWARDS=[]; // households author their own rewards
+  var DEFAULT_KID_REWARDS=[]; // parents author their kids' rewards
   var SEED=[
     {t:"Deep-clean the kitchen — counters, hob, sink",p:"high",start:"2026-07-28",end:"2026-07-28"},
     {t:"Replace HVAC air filter",p:"med",start:"2026-07-28",end:"2026-07-31"},
@@ -1455,6 +1414,7 @@
     }
     var admin=$("#kidRewardAdmin"),adminList=$("#ownerKidRewards"); adminList.innerHTML="";
     admin.classList.toggle("hidden",!isOwner());
+    if(isOwner()&&!S.kidRewards.length){ var kre0=document.createElement("div"); kre0.className="empty"; kre0.style.padding="20px 0"; kre0.textContent="No kid rewards yet — write your first one below"; adminList.appendChild(kre0); }
     if(isOwner()) S.kidRewards.forEach(function(reward){
       var row=document.createElement("div"); row.className="reward";
       var label=document.createElement("div"); label.className="rname"; label.textContent=reward.name+" · "+reward.cost+" pts"; row.appendChild(label);
@@ -1465,6 +1425,7 @@
   function renderRewards(){
     var wrap=$("#adultRewards"); wrap.innerHTML=""; var me=current();
     $("#rewardAdmin").classList.toggle("hidden",!isOwner());
+    if(!S.rewards.length){ var re0=document.createElement("div"); re0.className="empty"; re0.style.padding="28px 0"; re0.textContent=isOwner()?"No rewards yet — write your first one below":"Your household hasn’t set up any rewards yet"; wrap.appendChild(re0); }
     S.rewards.forEach(function(r){
       var claimed=S.claims[r.id]||0;
       var div=document.createElement("div"); div.className="reward";
@@ -1534,6 +1495,7 @@
       li.appendChild(chk); li.appendChild(body); list.appendChild(li);
     });
     var kr=$("#kidRewards"); kr.innerHTML="";
+    if(!S.kidRewards.length){ var kv0=document.createElement("div"); kv0.className="empty"; kv0.style.padding="28px 0"; kv0.textContent="No rewards yet — ask a parent to add some"; kr.appendChild(kv0); }
     S.kidRewards.forEach(function(r){
       var div=document.createElement("div"); div.className="reward";
       var info=document.createElement("div"); info.className="rinfo"; var nm=document.createElement("div"); nm.className="rname"; nm.textContent=r.name; info.appendChild(nm);
