@@ -514,6 +514,22 @@
     html{scroll-behavior:auto}
     .theme-toggle,.theme-toggle .theme-icon{transition:none}
   }
+  /* ---- punishment mode ---- */
+  .addopts{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:2px 0 12px}
+  .addopt{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+  .addopt>span{white-space:nowrap}
+  .addopt select,.addopt input[type=date],.addopt input[type=number]{background:var(--surface);border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:10px;padding:6px 8px;outline:none;text-transform:none;letter-spacing:.02em}
+  .addopt select:focus,.addopt input:focus{border-color:var(--accent-ink);color:var(--text)}
+  .addopt.chk{color:var(--muted);cursor:pointer}
+  .addopt input[type=checkbox],.punchk input{accent-color:var(--accent);width:15px;height:15px}
+  .punishrow{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:10px}
+  .punchk{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);cursor:pointer}
+  .punsel{background:var(--surface);border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:10px;padding:5px 7px;outline:none}
+  .punsel:focus{border-color:var(--accent-ink);color:var(--text)}
+  .punhint{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--danger)}
+  .badge.missed{color:var(--danger);border-color:rgba(201,115,107,.45)}
+  li.task.overdue{background:linear-gradient(90deg,rgba(201,115,107,.06),transparent)}
+  .hhstanding{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted);margin-top:6px}
 </style>
 </head>
 <body>
@@ -745,6 +761,21 @@
         <select id="addAssignee"></select>
         <button id="addBtn">Add</button>
       </div>
+      <div class="addopts">
+        <label class="addopt"><span>Due</span><input id="addDue" type="date" /></label>
+        <label class="addopt chk"><input id="addPunish" type="checkbox" checked /> Punishable</label>
+        <label class="addopt" id="addPunishTypeWrap"><span>If&nbsp;missed</span><select id="addPunishType">
+          <option value="individual">Individual — the person loses points</option>
+          <option value="pool">Shared pool — the household loses points</option>
+          <option value="hybrid">Hybrid — person + household</option>
+          <option value="redistribution">Redistribution — pay it to someone else</option>
+        </select></label>
+        <label class="addopt owneronly hidden" id="penaltyModeWrap"><span>Penalty</span><select id="penaltyMode">
+          <option value="half">Half the points</option>
+          <option value="full">Full points</option>
+          <option value="custom">Custom…</option>
+        </select><input id="penaltyValue" type="number" min="1" max="100000" step="1" class="hidden" aria-label="Custom penalty points" style="width:66px" /></label>
+      </div>
       <div class="bar">
         <div class="filters">
           <button data-f="all" class="on">All</button>
@@ -764,6 +795,7 @@
         <div class="phead"><h2>Community</h2></div>
         <div class="bigstat"><span class="num" id="commNum">0</span><span class="unit">pts earned together</span></div>
         <div class="statlabel">Lifetime household contribution</div>
+        <div class="hhstanding hidden" id="hhStanding"></div>
         <ul class="board" id="board"></ul>
       </div>
 
@@ -865,6 +897,12 @@
 
   var PRIOS=["low","med","high"], PLABEL={low:"Low",med:"Medium",high:"High"}, PTS={low:10,med:20,high:30};
   function pointsFor(p){return PTS[p]||10;}
+  var PUNISH_TYPES={individual:"Individual",pool:"Shared household pool",hybrid:"Hybrid",redistribution:"Redistribution"};
+  var PUNISH_ORDER=["individual","pool","hybrid","redistribution"];
+  var PENALTY_MODES={half:1,full:1,custom:1};
+  function penaltyMode(){ return (S.profile&&PENALTY_MODES[S.profile.penaltyMode])?S.profile.penaltyMode:"half"; }
+  function penaltyFor(task){ var base=pointsFor(task.p),m=penaltyMode(); if(m==="full")return base; if(m==="custom")return Math.max(1,(S.profile&&S.profile.penaltyValue)||10); return Math.max(1,Math.round(base/2)); }
+  function todayISO(){ var d=new Date(),mo=d.getMonth()+1,da=d.getDate(); return d.getFullYear()+"-"+(mo<10?"0":"")+mo+"-"+(da<10?"0":"")+da; }
 
   var DEFAULT_REWARDS=[
     {id:"r1",name:"Control the thermostat for a day",cost:60},
@@ -936,8 +974,9 @@
   }
   function loadAll(){
     S.profile=readJSON(K.p,null);
+    if(S.profile){ if(typeof S.profile.pool!=="number")S.profile.pool=0; if(!PENALTY_MODES[S.profile.penaltyMode])S.profile.penaltyMode="half"; if(typeof S.profile.penaltyValue!=="number")S.profile.penaltyValue=10; }
     S.members=readJSON(K.m,[]); S.members.forEach(function(m){ if(!m.id) m.id=uid("m"); });
-    S.tasks=readJSON(K.t,[]); S.tasks.forEach(function(t){ t.id=uid("t"); });
+    S.tasks=readJSON(K.t,[]); S.tasks.forEach(function(t){ t.id=uid("t"); if(typeof t.punishable!=="boolean")t.punishable=false; if(!PUNISH_TYPES[t.punishType])t.punishType="individual"; });
     S.claims=readJSON(K.r,{}); S.kidCodes=readJSON(K.kc,{}); S.reqs=readJSON(K.rq,[]);
     S.reqs.forEach(function(r){ if(!r.id) r.id=uid("rq"); });
     S.rewards=normalizeRewards(readJSON(K.rw,null),DEFAULT_REWARDS);
@@ -1030,14 +1069,37 @@
   // ---------- task actions ----------
   function award(assigneeId,pts){ var m=mById(assigneeId); if(!m)return; m.pts=(m.pts||0)+pts; m.contrib=(m.contrib||0)+pts; }
   function unaward(assigneeId,pts){ var m=mById(assigneeId); if(!m)return; m.pts=Math.max(0,(m.pts||0)-pts); m.contrib=Math.max(0,(m.contrib||0)-pts); }
+  function poolAdd(n){ if(!S.profile)return; S.profile.pool=Math.max(0,(S.profile.pool||0)+n); }
+  function poolCreditForTask(task,pts,sign){ if(!task.punishable||!pts)return; var t=task.punishType||"individual"; if(t==="pool")poolAdd(sign*pts); else if(t==="hybrid")poolAdd(sign*Math.max(1,Math.round(pts/2))); }
+  function applyOverduePenalties(){
+    var changed=false, today=todayISO();
+    S.tasks.forEach(function(task){
+      if(task.status!=="active"||!task.punishable||task.penalized||!task.end||task.end>=today) return;
+      var pen=penaltyFor(task), type=task.punishType||"individual", who=mById(task.assigneeId);
+      if(type==="pool"){ poolAdd(-pen); }
+      else if(type==="hybrid"){ var h=Math.max(1,Math.round(pen/2)); unaward(task.assigneeId,h); poolAdd(-h); }
+      else if(type==="redistribution"){
+        unaward(task.assigneeId,pen);
+        var to=task.redistributeTo;
+        if(to&&to!=="all"&&to!==task.assigneeId&&mById(to)){ var rm=mById(to); rm.pts=(rm.pts||0)+pen; rm.contrib=(rm.contrib||0)+pen; }
+        else { var others=S.members.filter(function(m){return m.id!==task.assigneeId;}); var each=others.length?Math.floor(pen/others.length):0; if(each>0) others.forEach(function(m){ m.pts=(m.pts||0)+each; m.contrib=(m.contrib||0)+each; }); }
+      }
+      else { unaward(task.assigneeId,pen); }
+      task.penalized=true; task.penaltyAmt=pen; task.penaltyType=type;
+      if(who) notifyMember(who.id,"Missed the deadline on “"+task.t+"”. Penalty: −"+pen+" pts ("+(PUNISH_TYPES[type]||type)+").");
+      changed=true;
+    });
+    if(changed) save();
+    return changed;
+  }
 
   function completeTask(task,byId){
     if(verifyRequired(task)){ task.status="pending"; task.doneById=byId; flash("Marked done · <b>awaiting verification</b>"); }
-    else { task.status="done"; task.doneById=byId; var a=pointsFor(task.p); task.awarded=a; award(task.assigneeId,a); flash("Completed · <b>+"+a+" pts</b>"); }
+    else { task.status="done"; task.doneById=byId; var a=pointsFor(task.p); task.awarded=a; award(task.assigneeId,a); poolCreditForTask(task,a,1); flash("Completed · <b>+"+a+" pts</b>"); }
     save(); renderAll();
   }
   function approveTask(task){
-    task.status="done"; var a=pointsFor(task.p); task.awarded=a; award(task.assigneeId,a);
+    task.status="done"; var a=pointsFor(task.p); task.awarded=a; award(task.assigneeId,a); poolCreditForTask(task,a,1);
     var doer=mById(task.assigneeId);
     flash("Approved · <b>+"+a+" pts</b> to "+(doer?doer.name:"member"));
     save(); renderAll();
@@ -1047,7 +1109,7 @@
     task.status="active"; task.doneById=null; task.awarded=0;
     flash("Sent back · the assignee will be notified"); save(); renderAll();
   }
-  function reopenTask(task){ if(task.status==="done"&&task.awarded){ unaward(task.assigneeId,task.awarded); } task.status="active"; task.doneById=null; task.awarded=0; save(); renderAll(); }
+  function reopenTask(task){ if(task.status==="done"&&task.awarded){ poolCreditForTask(task,task.awarded,-1); unaward(task.assigneeId,task.awarded); } task.status="active"; task.doneById=null; task.awarded=0; save(); renderAll(); }
   function removeTask(task){ S.tasks=S.tasks.filter(function(x){return x.id!==task.id;}); save(); renderAll(); }
   function cyclePrio(task){
     if(task.status!=="active") return; // lock priority once completed/pending — no payout tampering
@@ -1057,7 +1119,10 @@
   function addTask(){
     var inp=$("#addInput"); var v=inp.value.trim(); if(!v)return;
     var who=$("#addAssignee").value || current().id;
-    S.tasks.unshift({id:uid("t"),t:v,p:"med",start:SEED[0].start,end:SEED[0].start,assigneeId:who,status:"active",doneById:null,awarded:0});
+    var due=($("#addDue")&&$("#addDue").value)||todayISO();
+    var punishable=$("#addPunish")?$("#addPunish").checked:true;
+    var ptype=($("#addPunishType")&&PUNISH_TYPES[$("#addPunishType").value])?$("#addPunishType").value:"individual";
+    S.tasks.unshift({id:uid("t"),t:v,p:"med",start:todayISO(),end:due,assigneeId:who,status:"active",doneById:null,awarded:0,punishable:punishable,punishType:ptype,redistributeTo:"all"});
     inp.value=""; save(); renderAll(); inp.focus();
   }
 
@@ -1235,7 +1300,7 @@
   function taskRow(task){
     var me=current();
     var li=document.createElement("li");
-    li.className="task"+(task.status==="done"?" done":"")+(task.status==="pending"?" pending":"");
+    li.className="task"+(task.status==="done"?" done":"")+(task.status==="pending"?" pending":"")+(task.penalized?" overdue":"");
 
     var chk=document.createElement("button"); chk.className="check"; chk.setAttribute("aria-label","complete");
     var mine=(task.assigneeId===me.id);
@@ -1254,6 +1319,7 @@
     var pts=document.createElement("span"); pts.className="pts"; pts.textContent="+"+pointsFor(task.p)+" pts";
     var status=document.createElement("span"); status.className="badge "+task.status; status.textContent=task.status==="pending"?"Pending":(task.status==="done"?"Done":"Active");
     meta.appendChild(tag); meta.appendChild(pts); meta.appendChild(status);
+    if(task.penalized){ var mbadge=document.createElement("span"); mbadge.className="badge missed"; mbadge.textContent="Missed −"+(task.penaltyAmt||0); meta.appendChild(mbadge); }
     if(S.members.length>1){ meta.appendChild(assigneeSelect(task)); }
 
     var dates=document.createElement("div"); dates.className="dates";
@@ -1263,6 +1329,23 @@
     dates.appendChild(sl); dates.appendChild(dateInput(task,"start")); dates.appendChild(arr); dates.appendChild(el); dates.appendChild(dateInput(task,"end"));
 
     body.appendChild(title); body.appendChild(meta); body.appendChild(dates);
+    var pun=document.createElement("div"); pun.className="punishrow";
+    var plab=document.createElement("label"); plab.className="punchk"; var pcb=document.createElement("input"); pcb.type="checkbox"; pcb.checked=!!task.punishable;
+    pcb.addEventListener("change",function(){ task.punishable=pcb.checked; if(task.punishable&&!PUNISH_TYPES[task.punishType])task.punishType="individual"; save(); renderAll(); });
+    plab.appendChild(pcb); plab.appendChild(document.createTextNode(" Punishable")); pun.appendChild(plab);
+    if(task.punishable){
+      var psel=document.createElement("select"); psel.className="punsel"; psel.setAttribute("aria-label","If missed, punishment type");
+      PUNISH_ORDER.forEach(function(k){ var o=document.createElement("option"); o.value=k; o.textContent=PUNISH_TYPES[k]; if((task.punishType||"individual")===k)o.selected=true; psel.appendChild(o); });
+      psel.addEventListener("change",function(){ task.punishType=psel.value; save(); renderAll(); }); pun.appendChild(psel);
+      if(task.punishType==="redistribution"){
+        var rsel=document.createElement("select"); rsel.className="punsel"; rsel.setAttribute("aria-label","Redistribute the points to");
+        var oall=document.createElement("option"); oall.value="all"; oall.textContent="→ Everyone else, split evenly"; if(!task.redistributeTo||task.redistributeTo==="all")oall.selected=true; rsel.appendChild(oall);
+        S.members.forEach(function(m){ if(m.id===task.assigneeId)return; var o=document.createElement("option"); o.value=m.id; o.textContent="→ "+m.name+(m.isKid?" (kid)":""); if(task.redistributeTo===m.id)o.selected=true; rsel.appendChild(o); });
+        rsel.addEventListener("change",function(){ task.redistributeTo=rsel.value; save(); renderAll(); }); pun.appendChild(rsel);
+      }
+      var phint=document.createElement("span"); phint.className="punhint"; phint.textContent=task.penalized?("Missed · −"+(task.penaltyAmt||0)+" pts"):("−"+penaltyFor(task)+" pts if late"); pun.appendChild(phint);
+    }
+    body.appendChild(pun);
 
     if(task.status==="pending"){
       if(canVerify(task,me)){
@@ -1302,6 +1385,9 @@
   function renderCommunity(){
     var total=S.members.reduce(function(a,m){return a+(m.contrib||0);},0);
     $("#commNum").textContent=total;
+    var pool=(S.profile&&S.profile.pool)||0;
+    var usesPool=pool>0||S.tasks.some(function(t){return t.punishable&&(t.punishType==="pool"||t.punishType==="hybrid");});
+    var hs=$("#hhStanding"); if(hs){ hs.textContent=usesPool?("Household standing · "+pool+" pts"):""; hs.classList.toggle("hidden",!usesPool); }
     var board=$("#board"); board.innerHTML="";
     var ms=S.members.slice().sort(function(a,b){return (b.contrib||0)-(a.contrib||0);});
     ms.forEach(function(m,i){
@@ -1401,6 +1487,11 @@
       family:"Assign chores to kids; approve what they finish. Generate a code so a kid can log in." };
     $("#appSub").textContent=subs[S.profile.mode];
     $("#hhLabel").textContent=S.profile.household||"Your household";
+    var pmWrap=$("#penaltyModeWrap"); if(pmWrap) pmWrap.classList.toggle("hidden",!isOwner());
+    var pmSel=$("#penaltyMode"); if(pmSel) pmSel.value=penaltyMode();
+    var pmVal=$("#penaltyValue"); if(pmVal){ pmVal.value=(S.profile&&S.profile.penaltyValue)||10; pmVal.classList.toggle("hidden",!(isOwner()&&penaltyMode()==="custom")); }
+    var addDue=$("#addDue"); if(addDue&&!addDue.value) addDue.value=todayISO();
+    var apt=$("#addPunishType"),apc=$("#addPunish"); if(apt&&apc){ apt.disabled=!apc.checked; if(apt.parentNode)apt.parentNode.style.opacity=apc.checked?"1":".45"; }
   }
 
   function renderAll(){ renderHeader(); renderNotifications(current(),"notifications"); renderTasks(); renderCommunity(); renderKidPanel(); renderRewards(); }
@@ -1428,6 +1519,7 @@
       var st=document.createElement("span"); st.className="badge "+task.status; st.textContent=task.status==="pending"?"Waiting for parent":(task.status==="done"?"Approved":"To do");
       var dd=document.createElement("span"); dd.className="due"; dd.style.cssText="font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.1em"; dd.textContent=task.end?("by "+fmt(task.end)):"";
       meta.appendChild(tag); meta.appendChild(pts); meta.appendChild(st); if(task.end)meta.appendChild(dd);
+      if(task.penalized){ var kmb=document.createElement("span"); kmb.className="badge missed"; kmb.textContent="Missed −"+(task.penaltyAmt||0); meta.appendChild(kmb); }
       body.appendChild(title); body.appendChild(meta);
       li.appendChild(chk); li.appendChild(body); list.appendChild(li);
     });
@@ -1468,15 +1560,16 @@
     S.persona=me.id;
     // seed tasks round-robin
     var order=S.members.slice(); var i=0;
-    S.tasks=SEED.map(function(o){ var c=clone(o); c.id=uid("t"); c.assigneeId=order[i%order.length].id; i++; c.status="active"; c.doneById=null; c.awarded=0; return c; });
+    S.tasks=SEED.map(function(o){ var c=clone(o); c.id=uid("t"); c.assigneeId=order[i%order.length].id; i++; c.status="active"; c.doneById=null; c.awarded=0; c.punishable=false; c.punishType="individual"; c.redistributeTo="all"; return c; });
     S.profile.mode=setupMode; S.profile.household=setupMode==="family"?"Your family":(setupMode==="roommates"?"Your house":(setupMode==="couple"?"You two":"Just you"));
+    S.profile.pool=0; S.profile.penaltyMode="half"; S.profile.penaltyValue=10;
     save();
   }
 
   // ---------- screen switching ----------
   function show(id){ ["home","login","setup","app","kidapp"].forEach(function(s){ $("#"+s).classList.toggle("hidden",s!==id); }); window.scrollTo(0,0); }
-  function enterApp(memberId){ S.persona=memberId||you().id; S.kid=null; applyMemberSettings(current()); show("app"); renderAll(); }
-  function enterKid(kid){ S.kid=kid; S.persona=null; applyMemberSettings(kid); show("kidapp"); renderKid(); }
+  function enterApp(memberId){ S.persona=memberId||you().id; S.kid=null; applyMemberSettings(current()); applyOverduePenalties(); show("app"); renderAll(); }
+  function enterKid(kid){ S.kid=kid; S.persona=null; applyMemberSettings(kid); applyOverduePenalties(); show("kidapp"); renderKid(); }
 
   // ---- per-member PIN login (local-only; no session is persisted) ----
   var pinTarget=null;
@@ -1571,6 +1664,9 @@
 
   $("#addBtn").addEventListener("click",addTask);
   $("#addInput").addEventListener("keydown",function(ev){ if(ev.key==="Enter") addTask(); });
+  (function(){ var ap=$("#addPunish"),apt=$("#addPunishType"); if(ap&&apt){ ap.addEventListener("change",function(){ apt.disabled=!ap.checked; if(apt.parentNode)apt.parentNode.style.opacity=ap.checked?"1":".45"; }); }
+    var pm=$("#penaltyMode"); if(pm){ pm.addEventListener("change",function(){ if(!S.profile)return; S.profile.penaltyMode=PENALTY_MODES[pm.value]?pm.value:"half"; save(); renderAll(); flash("Overdue penalty · <b>"+pm.options[pm.selectedIndex].text+"</b>"); }); }
+    var pmv=$("#penaltyValue"); if(pmv){ pmv.addEventListener("change",function(){ if(!S.profile)return; var v=Math.round(Number(pmv.value)); S.profile.penaltyValue=(isFinite(v)&&v>=1&&v<=100000)?v:10; save(); renderAll(); }); } })();
   document.querySelectorAll(".filters button").forEach(function(b){ b.addEventListener("click",function(){ S.filter=b.dataset.f; document.querySelectorAll(".filters button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); renderTasks(); }); });
   $("#clearDone").addEventListener("click",function(){ S.tasks=S.tasks.filter(function(t){return t.status!=="done";}); save(); renderAll(); });
 
@@ -1618,6 +1714,7 @@
   applyTheme(readTheme());
   clearExistingUserDataOnce();
   loadAll();
+  applyOverduePenalties();
   // Intentionally never restore a signed-in profile after refresh or reopen.
   S.persona=null; S.kid=null; show("home");
 })();
