@@ -10,13 +10,14 @@
     color-scheme:dark;
     --bg:#08080a; --bg-2:#0c0c0f; --surface:#101013; --surface-2:#141418;
     --line:rgba(255,255,255,.07); --line-strong:rgba(255,255,255,.14);
-    --text:#ececed; --muted:#9b9ba3; --faint:#7b7b84; --placeholder:#85858e;
+    --text:#f3f3f4; --muted:#c4c4ca; --faint:#aaaab3; --placeholder:#a7a7b0;
     --accent:#c8a96a; --accent-ink:#c8a96a; --accent-hover:#d8bd83; --accent-soft:rgba(200,169,106,.14);
     --danger:#c9736b; --ok:#7fb08a; --pend:#c9a24b;
     --glow-1:#17171d; --glow-2:#121218; --focus-bg:#0a0a0c;
     --nav-bg-1:rgba(8,8,10,.92); --nav-bg-2:rgba(8,8,10,.72); --on-accent:#0b0b0c;
     --dur:180ms; --ease:cubic-bezier(.16,1,.3,1);
-    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --mono:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --code:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
     --serif:Georgia,"Times New Roman",serif;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --z-nav:100; --edge:clamp(20px,5vw,64px);
@@ -25,7 +26,7 @@
     color-scheme:light;
     --bg:#fff7fb; --bg-2:#ffeff6; --surface:#fffafd; --surface-2:#fbe3ee;
     --line:rgba(77,39,56,.13); --line-strong:rgba(77,39,56,.25);
-    --text:#3a2430; --muted:#674657; --faint:#755064; --placeholder:#684758;
+    --text:#2f1b26; --muted:#5a394a; --faint:#654456; --placeholder:#654456;
     --accent:#c85883; --accent-ink:#9f2f5a; --accent-hover:#b74672; --accent-soft:rgba(200,88,131,.14);
     --danger:#a92f56; --ok:#397052; --pend:#7b571e;
     --glow-1:#ffdbe9; --glow-2:#ffe9f2; --focus-bg:#fff0f6;
@@ -82,7 +83,7 @@
   .mpick{display:grid;gap:10px;margin-bottom:22px}
   .mpick button{display:flex;align-items:center;gap:14px;text-align:left;background:var(--bg);border:1px solid var(--line);padding:14px 16px;color:var(--text);transition:border-color var(--dur) var(--ease),background var(--dur) var(--ease)}
   .mpick button:hover{border-color:var(--accent-ink);background:linear-gradient(180deg,var(--accent-soft),transparent)}
-  .mpick .av{width:32px;height:32px;flex:0 0 auto;border:1px solid var(--line-strong);display:grid;place-items:center;font-family:var(--serif);color:var(--accent-ink);font-size:14px;background:var(--surface)}
+  .mpick .av{width:38px;height:38px;flex:0 0 auto;border:1px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;font-family:var(--sans);color:var(--accent-ink);font-size:19px;background:var(--surface)}
   .mpick .mn{font-size:14px;display:block}
   .mpick .ms{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-top:3px;display:block}
 
@@ -106,7 +107,7 @@
   .persona label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
   .persona select{background:var(--surface);border:1px solid var(--line);color:var(--text);font-size:12px;padding:7px 9px;outline:none}
   .persona select:focus{border-color:var(--accent-ink)}
-  .avatar{width:34px;height:34px;border:1px solid var(--line-strong);display:grid;place-items:center;font-family:var(--serif);font-size:14px;color:var(--accent-ink);background:var(--surface)}
+  .avatar{width:38px;height:38px;border:1px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;font-family:var(--sans);font-size:19px;color:var(--accent-ink);background:var(--surface)}
   .ghost{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;transition:border-color var(--dur) var(--ease),color var(--dur) var(--ease)}
   .ghost:hover{border-color:var(--line-strong);color:var(--text)}
   .modechip{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);padding:5px 9px;margin-bottom:24px;display:inline-block}
@@ -245,7 +246,7 @@
   .kidmgr .krow{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line)}
   .kidmgr .krow:first-of-type{border-top:0}
   .kidmgr .kn{flex:1;font-size:13px}
-  .code{font-family:var(--mono);font-size:14px;letter-spacing:.28em;color:var(--accent-ink);background:var(--bg);border:1px solid rgba(200,169,106,.3);padding:5px 10px}
+  .code{font-family:var(--code);font-size:14px;letter-spacing:.22em;color:var(--accent-ink);background:var(--bg);border:1px solid rgba(200,169,106,.3);padding:5px 10px}
   .kid-code-actions{display:flex;gap:6px;margin-left:auto}
   .kid-code-actions .ghost{padding:7px 9px;font-size:9px}
   .kid-code-help{margin:-8px 0 10px}
@@ -550,6 +551,38 @@
   .cal-row .crt{font-size:14px;flex:1 1 auto;min-width:0}
   .cal-empty{color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:16px 0}
   @media(max-width:600px){ .cal-cell{min-height:52px;padding:5px 3px;gap:5px} .cal-grid{gap:4px} .cal-nav{width:44px;height:44px} .cal-dn{font-size:10px} }
+
+  /* app navigation, profile icons, and family behavior points */
+  .app-tabs{display:flex;gap:8px;margin:8px 0 28px;padding:6px;border:1px solid var(--line);background:var(--surface);position:sticky;top:8px;z-index:4;box-shadow:0 10px 28px rgba(0,0,0,.14)}
+  .app-tabs button{flex:1;min-height:44px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:12px;font-weight:650;letter-spacing:.04em;padding:10px 14px;transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease),color var(--dur) var(--ease)}
+  .app-tabs button:hover{color:var(--text);border-color:var(--line)}
+  .app-tabs button.on{color:var(--text);background:var(--accent-soft);border-color:var(--accent-ink)}
+  .app-tabs .tab-count{display:inline-grid;place-items:center;min-width:20px;height:20px;margin-left:6px;padding:0 5px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;letter-spacing:0}
+  .workspace.tabbed{display:block;max-width:820px;margin:0 auto}
+  [data-adult-view].hidden,[data-kid-view].hidden{display:none!important}
+  .profile-icon{display:inline-grid;place-items:center;width:28px;height:28px;flex:0 0 auto;border:1px solid var(--line);border-radius:50%;background:var(--surface);font-size:15px}
+  .icon-picker{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  .icon-choice{min-height:44px;border:1px solid var(--line);border-radius:50%;background:var(--bg);color:var(--text);font-size:20px}
+  .icon-choice.on{border-color:var(--accent-ink);background:var(--accent-soft)}
+  .kidmgr .krow{flex-wrap:wrap}
+  .kidmgr .kn{display:flex;align-items:center;gap:9px}
+  .behavior-controls{flex:1 0 100%;display:grid;grid-template-columns:92px 72px minmax(120px,1fr) auto;gap:7px;padding:12px 0 2px;border-top:1px dashed var(--line)}
+  .behavior-controls select,.behavior-controls input{min-width:0;background:var(--bg);border:1px solid var(--line);color:var(--text);font-size:12px;padding:9px 10px;outline:none}
+  .behavior-controls input:focus,.behavior-controls select:focus{border-color:var(--accent-ink)}
+  .behavior-controls button{border:1px solid var(--line-strong);background:transparent;color:var(--text);font-size:11px;font-weight:650;padding:9px 12px}
+  .behavior-controls button:hover{border-color:var(--accent-ink);background:var(--accent-soft)}
+  .behavior-log{flex:1 0 100%;display:grid;gap:5px;margin-top:6px}
+  .behavior-entry{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;line-height:1.4}
+  .behavior-entry b{color:var(--text)}
+  .behavior-entry .positive{color:var(--ok)}
+  .behavior-entry .negative{color:var(--danger)}
+  .kid-behavior-note{min-height:20px;margin-top:10px;color:var(--muted);font-size:13px}
+  @media(max-width:600px){
+    .app-tabs{position:sticky;top:8px;margin-bottom:22px;overflow-x:auto}
+    .app-tabs button{min-width:max-content;padding-inline:12px}
+    .behavior-controls{grid-template-columns:1fr 88px}
+    .behavior-controls input[type=text],.behavior-controls button{grid-column:1/-1}
+  }
 </style>
 </head>
 <body>
@@ -764,11 +797,16 @@
 
   <span class="modechip" id="modeChip">MODE</span>
   <div id="notifications" class="notice-stack hidden" aria-live="polite"></div>
-  <h1 class="headline">Today&rsquo;s Roster</h1>
-  <p class="sub" id="appSub"></p>
+  <nav class="app-tabs" id="adultTabs" role="tablist" aria-label="Chorely sections">
+    <button id="adultTabChores" data-tab="chores" class="on" type="button" role="tab" aria-selected="true">Chores</button>
+    <button id="adultTabFamily" data-tab="family" type="button" role="tab" aria-selected="false">Household<span id="familyTabCount" class="tab-count hidden"></span></button>
+    <button id="adultTabRewards" data-tab="rewards" type="button" role="tab" aria-selected="false">Rewards</button>
+  </nav>
+  <h1 class="headline" data-adult-view="chores">Today&rsquo;s Roster</h1>
+  <p class="sub" id="appSub" data-adult-view="chores"></p>
 
-  <div class="workspace">
-    <section>
+  <div class="workspace tabbed">
+    <section data-adult-view="chores">
       <div class="add">
         <input id="addInput" type="text" placeholder="Add a chore…" />
         <select id="addAssignee"></select>
@@ -805,7 +843,7 @@
     </section>
 
     <aside>
-      <div class="panel">
+      <div class="panel hidden" data-adult-view="family">
         <div class="eyebrow" id="hhLabel">Your household</div>
         <div class="phead"><h2>Community</h2></div>
         <div class="bigstat"><span class="num" id="commNum">0</span><span class="unit">pts earned together</span></div>
@@ -814,7 +852,7 @@
         <ul class="board" id="board"></ul>
       </div>
 
-      <div class="panel" id="kidPanel">
+      <div class="panel hidden" id="kidPanel" data-adult-view="family">
         <div class="eyebrow">Child accounts</div>
         <div class="phead"><h2>Kids &amp; codes</h2></div>
         <div id="kidCodeHelp" class="owner-note kid-code-help"></div>
@@ -833,7 +871,7 @@
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel hidden" data-adult-view="rewards">
         <div class="eyebrow">Redeem your points</div>
         <div class="phead"><h2>Rewards</h2></div>
         <div class="bigstat"><span class="num" id="balBig">0</span><span class="unit">pts to spend</span></div>
@@ -865,15 +903,20 @@
     </div>
   </div>
   <div class="kidhero"><div class="num" id="kidPts">0</div><div class="lbl">your points</div></div>
+  <div class="kid-behavior-note" id="kidBehaviorNote" aria-live="polite"></div>
   <div id="kidNotifications" class="notice-stack hidden" aria-live="polite"></div>
-  <div class="workspace">
-    <section>
+  <nav class="app-tabs" id="kidTabs" role="tablist" aria-label="Kid sections">
+    <button data-tab="chores" class="on" type="button" role="tab" aria-selected="true">My chores</button>
+    <button data-tab="rewards" type="button" role="tab" aria-selected="false">Rewards</button>
+  </nav>
+  <div class="workspace tabbed">
+    <section data-kid-view="chores">
       <h1 class="headline" style="font-size:24px">My chores</h1>
       <p class="sub">Check a chore when you finish — a parent approves it to earn points.</p>
       <ul class="list" id="kidList"></ul>
     </section>
     <aside>
-      <div class="panel">
+      <div class="panel hidden" data-kid-view="rewards">
         <div class="eyebrow">Spend your points</div>
         <div class="phead"><h2>Rewards</h2></div>
         <p class="sub" style="margin-bottom:10px">Ask a parent — they approve each reward.</p>
@@ -890,6 +933,7 @@
     <div id="settingsRole" class="settings-role"></div>
     <p id="settingsRecommendation" class="settings-rec"></p>
     <div class="settings-grid">
+      <div class="field"><label>Profile icon</label><div id="settingsIcons" class="icon-picker" role="radiogroup" aria-label="Profile icon"></div></div>
       <div class="field"><label for="settingsTheme">Theme</label><select id="settingsTheme"><option value="dark">Dark</option><option value="light">Light &amp; playful</option></select></div>
       <div class="field"><label for="settingsDensity">Task spacing</label><select id="settingsDensity"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
       <div class="field"><label for="settingsStartView">Default task view</label><select id="settingsStartView"></select></div>
@@ -908,7 +952,7 @@
 <script>
 (function(){
   "use strict";
-  var K={p:"meridian.profile.v3",m:"meridian.members.v3",t:"meridian.tasks.v3",r:"meridian.rewardclaims.v3",kc:"meridian.kidcodes.v3",rq:"meridian.rewardreqs.v3",rw:"meridian.rewards.v1",krw:"meridian.kidrewards.v1",n:"meridian.notifications.v1",theme:"meridian.theme.v1",us:"meridian.usersettings.v1"};
+  var K={p:"meridian.profile.v3",m:"meridian.members.v3",t:"meridian.tasks.v3",r:"meridian.rewardclaims.v3",kc:"meridian.kidcodes.v3",rq:"meridian.rewardreqs.v3",rw:"meridian.rewards.v1",krw:"meridian.kidrewards.v1",n:"meridian.notifications.v1",theme:"meridian.theme.v1",us:"meridian.usersettings.v1",bh:"meridian.behavior.v1"};
 
   var PRIOS=["low","med","high"], PLABEL={low:"Low",med:"Medium",high:"High"}, PTS={low:10,med:20,high:30};
   function pointsFor(p){return PTS[p]||10;}
@@ -921,6 +965,7 @@
 
   var DEFAULT_REWARDS=[]; // households author their own rewards
   var DEFAULT_KID_REWARDS=[]; // parents author their kids' rewards
+  var PROFILE_ICONS=["🙂","😎","🤓","🦊","🐼","🐯","🦁","🐸","🐙","🦄","🚀","⭐"];
   var SEED=[
     {t:"Deep-clean the kitchen — counters, hob, sink",p:"high",start:"2026-07-28",end:"2026-07-28"},
     {t:"Replace HVAC air filter",p:"med",start:"2026-07-28",end:"2026-07-31"},
@@ -949,7 +994,7 @@
     }).filter(Boolean);
   }
 
-  var S={ profile:null, members:[], tasks:[], claims:{}, kidCodes:{}, reqs:[], rewards:[], kidRewards:[], notifications:[], userSettings:{}, persona:null, filter:"all", view:"list", calMonth:null, calSel:null, kid:null };
+  var S={ profile:null, members:[], tasks:[], claims:{}, kidCodes:{}, reqs:[], rewards:[], kidRewards:[], notifications:[], userSettings:{}, behavior:[], persona:null, filter:"all", view:"list", adultTab:"chores", kidTab:"chores", calMonth:null, calSel:null, kid:null };
 
   function save(){
     try{
@@ -963,20 +1008,21 @@
       localStorage.setItem(K.krw,JSON.stringify(S.kidRewards));
       localStorage.setItem(K.n,JSON.stringify(S.notifications));
       localStorage.setItem(K.us,JSON.stringify(S.userSettings));
+      localStorage.setItem(K.bh,JSON.stringify(S.behavior));
     }catch(e){}
   }
   function clearExistingUserDataOnce(){
     var resetKey="meridian.userdata.reset.2026-07-28.2";
     try{
       if(localStorage.getItem(resetKey)) return;
-      [K.p,K.m,K.t,K.r,K.kc,K.rq,K.rw,K.krw,K.n,K.us,"meridian.auth.v1"].forEach(function(key){ localStorage.removeItem(key); });
+      [K.p,K.m,K.t,K.r,K.kc,K.rq,K.rw,K.krw,K.n,K.us,K.bh,"meridian.auth.v1"].forEach(function(key){ localStorage.removeItem(key); });
       localStorage.setItem(resetKey,"complete");
     }catch(e){}
   }
   function loadAll(){
     S.profile=readJSON(K.p,null);
     if(S.profile){ if(typeof S.profile.pool!=="number")S.profile.pool=0; if(!PENALTY_MODES[S.profile.penaltyMode])S.profile.penaltyMode="half"; if(typeof S.profile.penaltyValue!=="number")S.profile.penaltyValue=10; }
-    S.members=readJSON(K.m,[]); S.members.forEach(function(m){ if(!m.id) m.id=uid("m"); });
+    S.members=readJSON(K.m,[]); S.members.forEach(function(m,i){ if(!m.id) m.id=uid("m"); if(PROFILE_ICONS.indexOf(m.icon)<0)m.icon=PROFILE_ICONS[i%PROFILE_ICONS.length]; });
     S.tasks=readJSON(K.t,[]); S.tasks.forEach(function(t){ t.id=uid("t"); if(typeof t.punishable!=="boolean")t.punishable=false; if(!PUNISH_TYPES[t.punishType])t.punishType="individual"; });
     S.claims=readJSON(K.r,{}); S.kidCodes=readJSON(K.kc,{}); S.reqs=readJSON(K.rq,[]);
     S.reqs.forEach(function(r){ if(!r.id) r.id=uid("rq"); });
@@ -984,6 +1030,7 @@
     S.kidRewards=normalizeRewards(readJSON(K.krw,null),DEFAULT_KID_REWARDS);
     S.notifications=readJSON(K.n,[]); if(!Array.isArray(S.notifications)) S.notifications=[];
     S.userSettings=readJSON(K.us,{}); if(!S.userSettings||Array.isArray(S.userSettings)) S.userSettings={};
+    S.behavior=readJSON(K.bh,[]); if(!Array.isArray(S.behavior)) S.behavior=[];
   }
 
   var $=function(s){return document.querySelector(s);};
@@ -1027,6 +1074,7 @@
   function kids(){ return S.members.filter(function(m){return m.isKid;}); }
   function you(){ return S.members.filter(function(m){return m.isYou;})[0] || S.members[0]; }
   function current(){ return mById(S.persona) || you(); }
+  function avatarFor(member){ return member&&PROFILE_ICONS.indexOf(member.icon)>=0?member.icon:"🙂"; }
   function notifyMember(memberId,message){
     if(!memberId) return;
     S.notifications.push({id:uid("n"),memberId:memberId,message:String(message).slice(0,220),createdAt:Date.now(),read:false});
@@ -1166,8 +1214,19 @@
       document.querySelectorAll(".filters button").forEach(function(button){button.classList.toggle("on",button.dataset.f===S.filter);});
     }
   }
-  var settingsTarget=null,settingsReturnFocus=null;
+  var settingsTarget=null,settingsReturnFocus=null,settingsIconChoice="🙂";
   function fillSettingsForm(member,settings){
+    settingsIconChoice=avatarFor(member);
+    var icons=$("#settingsIcons"); icons.innerHTML="";
+    PROFILE_ICONS.forEach(function(icon){
+      var button=document.createElement("button"); button.type="button"; button.className="icon-choice"+(icon===settingsIconChoice?" on":"");
+      button.textContent=icon; button.setAttribute("role","radio"); button.setAttribute("aria-label","Use "+icon+" as profile icon"); button.setAttribute("aria-checked",String(icon===settingsIconChoice));
+      button.addEventListener("click",function(){
+        settingsIconChoice=icon;
+        icons.querySelectorAll(".icon-choice").forEach(function(choice){ var selected=choice===button; choice.classList.toggle("on",selected); choice.setAttribute("aria-checked",String(selected)); });
+      });
+      icons.appendChild(button);
+    });
     $("#settingsTheme").value=settings.theme;
     $("#settingsDensity").value=settings.density;
     var start=$("#settingsStartView"); start.innerHTML="";
@@ -1252,7 +1311,7 @@
   var CODEC="ABCDEFGHJKMNPQRSTUVWXYZ23456789";
   function genCode(){ var c; do{ c=""; for(var i=0;i<6;i++) c+=CODEC[Math.floor(Math.random()*CODEC.length)]; }while(S.kidCodes[c]); return c; }
   function addKid(name){
-    var kid={id:uid("m"),name:name||("Kid "+(kids().length+1)),isKid:true,isYou:false,pts:0,contrib:0};
+    var kid={id:uid("m"),name:name||("Kid "+(kids().length+1)),isKid:true,isYou:false,pts:0,contrib:0,icon:PROFILE_ICONS[S.members.length%PROFILE_ICONS.length]};
     S.members.push(kid); var code=genCode(); S.kidCodes[code]=kid.id; kid.code=code;
     save(); return kid;
   }
@@ -1277,6 +1336,24 @@
     if(typeof navigator!=="undefined"&&navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(code).then(copied).catch(function(){ flash(kid.name+"’s code · <b>"+code+"</b>"); });
     } else { flash(kid.name+"’s code · <b>"+code+"</b>"); }
+  }
+
+  // ---------- family behavior points ----------
+  function behaviorEntries(kidId){ return S.behavior.filter(function(entry){return entry.kidId===kidId;}).slice(-3).reverse(); }
+  function adjustBehavior(kid,direction,amountValue,reasonValue){
+    if(!kid||S.profile.mode!=="family"||!current()||current().isKid) return;
+    var amount=Math.round(Number(amountValue));
+    if(!Number.isFinite(amount)||amount<1||amount>100){ flash("Choose 1–100 behavior points"); return; }
+    var requested=direction==="subtract"?-amount:amount;
+    var before=Math.max(0,kid.pts||0),after=Math.max(0,before+requested),actual=after-before;
+    if(!actual){ flash(kid.name+" has no points to deduct"); return; }
+    var reason=String(reasonValue||"").trim().replace(/\s+/g," ").slice(0,80)|| (actual>0?"Positive behavior":"Behavior correction");
+    kid.pts=after;
+    S.behavior.push({id:uid("bh"),kidId:kid.id,delta:actual,reason:reason,byId:current().id,createdAt:Date.now()});
+    if(S.behavior.length>200) S.behavior=S.behavior.slice(-200);
+    notifyMember(kid.id,(actual>0?"+":"")+actual+" behavior points · "+reason);
+    save(); renderAll();
+    flash(kid.name+" · <b>"+(actual>0?"+":"")+actual+" pts</b>");
   }
 
   // ---------- rendering: task row ----------
@@ -1394,7 +1471,9 @@
     ms.forEach(function(m,i){
       var li=document.createElement("li"); li.className=(i<3?"top ":"")+(m.id===current().id?"self":"");
       var r=document.createElement("span"); r.className="rank"; r.textContent=(i+1<10?"0":"")+(i+1);
-      var nm=document.createElement("span"); nm.className="nm"; nm.appendChild(document.createTextNode(m.name));
+      var nm=document.createElement("span"); nm.className="nm";
+      var icon=document.createElement("span"); icon.className="profile-icon"; icon.textContent=avatarFor(m); icon.setAttribute("aria-hidden","true"); nm.appendChild(icon);
+      nm.appendChild(document.createTextNode(m.name));
       if(m.id===current().id){ var y=document.createElement("span"); y.className="rolebadge you"; y.textContent="You"; nm.appendChild(y); }
       else if(m.isKid){ var kb=document.createElement("span"); kb.className="rolebadge kid"; kb.textContent="Kid"; nm.appendChild(kb); }
       var bp=document.createElement("span"); bp.className="bp"; bp.textContent=(m.contrib||0)+" pts";
@@ -1414,7 +1493,9 @@
     if(!ks.length){ var e=document.createElement("div"); e.style.cssText="color:var(--faint);font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:6px 0"; e.textContent="No kids yet"; mgr.appendChild(e); }
     ks.forEach(function(kid){
       var row=document.createElement("div"); row.className="krow";
-      var nm=document.createElement("span"); nm.className="kn"; nm.textContent=kid.name+" · "+(kid.pts||0)+" pts";
+      var nm=document.createElement("span"); nm.className="kn";
+      var icon=document.createElement("span"); icon.className="profile-icon"; icon.textContent=avatarFor(kid); icon.setAttribute("aria-hidden","true"); nm.appendChild(icon);
+      nm.appendChild(document.createTextNode(kid.name+" · "+(kid.pts||0)+" pts"));
       row.appendChild(nm);
       if(owner){
         var currentCode=codeForKid(kid);
@@ -1425,6 +1506,26 @@
         }
         var generate=document.createElement("button"); generate.className="ghost"; generate.textContent=currentCode?"Regenerate":"Generate code"; generate.setAttribute("aria-label",(currentCode?"Regenerate":"Generate")+" code for "+kid.name); generate.addEventListener("click",function(){regenerateKidCode(kid);}); actions.appendChild(generate);
         row.appendChild(code); row.appendChild(actions);
+      }
+      var controls=document.createElement("form"); controls.className="behavior-controls"; controls.setAttribute("aria-label","Adjust behavior points for "+kid.name);
+      var direction=document.createElement("select"); direction.setAttribute("aria-label","Add or deduct points");
+      [["add","Add"],["subtract","Deduct"]].forEach(function(item){var option=document.createElement("option");option.value=item[0];option.textContent=item[1];direction.appendChild(option);});
+      var amount=document.createElement("input"); amount.type="number"; amount.min="1"; amount.max="100"; amount.step="1"; amount.value="5"; amount.setAttribute("aria-label","Behavior point amount");
+      var reason=document.createElement("input"); reason.type="text"; reason.maxLength=80; reason.placeholder="Reason (optional)"; reason.setAttribute("aria-label","Reason for behavior points");
+      var apply=document.createElement("button"); apply.type="submit"; apply.textContent="Apply points";
+      controls.appendChild(direction); controls.appendChild(amount); controls.appendChild(reason); controls.appendChild(apply);
+      controls.addEventListener("submit",function(event){event.preventDefault();adjustBehavior(kid,direction.value,amount.value,reason.value);});
+      row.appendChild(controls);
+      var entries=behaviorEntries(kid.id);
+      if(entries.length){
+        var log=document.createElement("div"); log.className="behavior-log";
+        entries.forEach(function(entry){
+          var line=document.createElement("div"); line.className="behavior-entry";
+          var copy=document.createElement("span"); copy.textContent=entry.reason;
+          var points=document.createElement("b"); points.className=entry.delta>0?"positive":"negative"; points.textContent=(entry.delta>0?"+":"")+entry.delta+" pts";
+          line.appendChild(copy); line.appendChild(points); log.appendChild(line);
+        });
+        row.appendChild(log);
       }
       mgr.appendChild(row);
     });
@@ -1474,7 +1575,7 @@
     var me=current();
     $("#balNum").textContent=me.pts||0; $("#balBig").textContent=me.pts||0;
     $("#balWho").textContent=me.name+"’s balance";
-    $("#avatar").textContent=(me.name[0]||"R").toUpperCase();
+    $("#avatar").textContent=avatarFor(me);
     var modeName={solo:"Solo",couple:"Couple",roommates:"Roommates",family:"Family"}[S.profile.mode];
     $("#modeChip").innerHTML="Mode · <b>"+modeName+"</b>";
     // A signed-in adult cannot impersonate another profile.
@@ -1551,13 +1652,29 @@
     else dlist.forEach(function(t){ detail.appendChild(calRow(t)); });
     host.appendChild(detail);
   }
-  function renderAll(){ renderHeader(); renderNotifications(current(),"notifications"); renderTasks(); renderCommunity(); renderKidPanel(); renderRewards(); applyView(); if(S.view==="calendar") renderCalendar(); }
+  function applyAdultTab(){
+    var tab=S.adultTab||"chores";
+    document.querySelectorAll("#app [data-adult-view]").forEach(function(node){node.classList.toggle("hidden",node.dataset.adultView!==tab);});
+    if(S.profile&&S.profile.mode!=="family") $("#kidPanel").classList.add("hidden");
+    document.querySelectorAll("#adultTabs button").forEach(function(button){var on=button.dataset.tab===tab;button.classList.toggle("on",on);button.setAttribute("aria-selected",String(on));});
+    var family=$("#adultTabFamily"); if(family) family.firstChild.nodeValue=S.profile&&S.profile.mode==="family"?"Kids":"Household";
+    var pending=S.reqs.filter(function(q){return q.status==="pending";}).length,count=$("#familyTabCount");
+    if(count){count.textContent=pending?String(pending):"";count.classList.toggle("hidden",!pending);}
+  }
+  function applyKidTab(){
+    var tab=S.kidTab||"chores";
+    document.querySelectorAll("#kidapp [data-kid-view]").forEach(function(node){node.classList.toggle("hidden",node.dataset.kidView!==tab);});
+    document.querySelectorAll("#kidTabs button").forEach(function(button){var on=button.dataset.tab===tab;button.classList.toggle("on",on);button.setAttribute("aria-selected",String(on));});
+  }
+  function renderAll(){ renderHeader(); renderNotifications(current(),"notifications"); renderTasks(); renderCommunity(); renderKidPanel(); renderRewards(); applyView(); if(S.view==="calendar") renderCalendar(); applyAdultTab(); }
 
   // ---------- KID VIEW ----------
   function renderKid(){
     var kid=S.kid; if(!kid)return;
-    $("#kidName").textContent=kid.name; $("#kidAvatar").textContent=(kid.name[0]||"K").toUpperCase();
+    $("#kidName").textContent=kid.name; $("#kidAvatar").textContent=avatarFor(kid);
     $("#kidPts").textContent=kid.pts||0;
+    var recent=behaviorEntries(kid.id)[0],note=$("#kidBehaviorNote");
+    note.textContent=recent?("Latest behavior points: "+(recent.delta>0?"+":"")+recent.delta+" · "+recent.reason):"";
     renderNotifications(kid,"kidNotifications");
     var list=$("#kidList"); list.innerHTML="";
     var mine=S.tasks.filter(function(t){return t.assigneeId===kid.id;});
@@ -1591,6 +1708,7 @@
       var btn=document.createElement("button"); btn.className="redeem"; btn.textContent="Ask"; btn.disabled=((kid.pts||0)<r.cost)||!!reqd; btn.addEventListener("click",function(){requestKidReward(kid,r);});
       div.appendChild(info); div.appendChild(cost); div.appendChild(btn); kr.appendChild(div);
     });
+    applyKidTab();
   }
 
   // ---------- SETUP ----------
@@ -1607,12 +1725,12 @@
   function buildHousehold(){
     var youName=(($("#f_owner")||{}).value||"").trim(); youName=youName?cap(youName):"You";
     S.profile=S.profile||{}; S.profile.name=youName;
-    S.members=[]; S.kidCodes={}; S.reqs=[]; S.claims={}; S.notifications=[]; S.rewards=DEFAULT_REWARDS.map(clone); S.kidRewards=DEFAULT_KID_REWARDS.map(clone);
-    var me={id:uid("m"),name:youName,isKid:false,isYou:true,pts:0,contrib:0}; S.members.push(me);
-    if(setupMode==="couple"){ var p=($("#f_partner")||{}).value; S.members.push({id:uid("m"),name:cap((p||"Partner").trim())||"Partner",isKid:false,isYou:false,pts:0,contrib:0}); }
-    else if(setupMode==="roommates"){ splitNames(($("#f_rooms")||{}).value).forEach(function(n){ S.members.push({id:uid("m"),name:cap(n),isKid:false,isYou:false,pts:0,contrib:0}); }); }
+    S.members=[]; S.kidCodes={}; S.reqs=[]; S.claims={}; S.notifications=[]; S.behavior=[]; S.rewards=DEFAULT_REWARDS.map(clone); S.kidRewards=DEFAULT_KID_REWARDS.map(clone);
+    var me={id:uid("m"),name:youName,isKid:false,isYou:true,pts:0,contrib:0,icon:PROFILE_ICONS[0]}; S.members.push(me);
+    if(setupMode==="couple"){ var p=($("#f_partner")||{}).value; S.members.push({id:uid("m"),name:cap((p||"Partner").trim())||"Partner",isKid:false,isYou:false,pts:0,contrib:0,icon:PROFILE_ICONS[1]}); }
+    else if(setupMode==="roommates"){ splitNames(($("#f_rooms")||{}).value).forEach(function(n){ S.members.push({id:uid("m"),name:cap(n),isKid:false,isYou:false,pts:0,contrib:0,icon:PROFILE_ICONS[S.members.length%PROFILE_ICONS.length]}); }); }
     else if(setupMode==="family"){
-      var cp=(($("#f_coparent")||{}).value||"").trim(); if(cp) S.members.push({id:uid("m"),name:cap(cp),isKid:false,isYou:false,pts:0,contrib:0});
+      var cp=(($("#f_coparent")||{}).value||"").trim(); if(cp) S.members.push({id:uid("m"),name:cap(cp),isKid:false,isYou:false,pts:0,contrib:0,icon:PROFILE_ICONS[S.members.length%PROFILE_ICONS.length]});
       splitNames(($("#f_kids")||{}).value).forEach(function(n){ addKid(cap(n)); });
     }
     S.persona=me.id;
@@ -1626,8 +1744,8 @@
 
   // ---------- screen switching ----------
   function show(id){ ["home","login","setup","app","kidapp"].forEach(function(s){ $("#"+s).classList.toggle("hidden",s!==id); }); window.scrollTo(0,0); }
-  function enterApp(memberId){ S.persona=memberId||you().id; S.kid=null; applyMemberSettings(current()); applyOverduePenalties(); show("app"); renderAll(); }
-  function enterKid(kid){ S.kid=kid; S.persona=null; applyMemberSettings(kid); applyOverduePenalties(); show("kidapp"); renderKid(); }
+  function enterApp(memberId){ S.persona=memberId||you().id; S.kid=null; S.adultTab="chores"; applyMemberSettings(current()); applyOverduePenalties(); show("app"); renderAll(); }
+  function enterKid(kid){ S.kid=kid; S.persona=null; S.kidTab="chores"; applyMemberSettings(kid); applyOverduePenalties(); show("kidapp"); renderKid(); }
 
   // ---- per-member PIN login (local-only; no session is persisted) ----
   var pinTarget=null;
@@ -1666,7 +1784,7 @@
     var box=$("#memberPick"); box.innerHTML="";
     adults().forEach(function(m){
       var b=document.createElement("button"); b.type="button";
-      var av=document.createElement("span"); av.className="av"; av.textContent=(m.name[0]||"?").toUpperCase();
+      var av=document.createElement("span"); av.className="av"; av.textContent=avatarFor(m);
       var w=document.createElement("span");
       var nm=document.createElement("span"); nm.className="mn"; nm.textContent=m.name;
       var ms=document.createElement("span"); ms.className="ms"; ms.textContent=hasPin(m)?"Enter PIN":"Set a PIN";
@@ -1727,6 +1845,8 @@
     var pmv=$("#penaltyValue"); if(pmv){ pmv.addEventListener("change",function(){ if(!S.profile)return; var v=Math.round(Number(pmv.value)); S.profile.penaltyValue=(isFinite(v)&&v>=1&&v<=100000)?v:10; save(); renderAll(); }); } })();
   document.querySelectorAll(".filters button").forEach(function(b){ b.addEventListener("click",function(){ S.filter=b.dataset.f; document.querySelectorAll(".filters button").forEach(function(x){x.classList.remove("on");}); b.classList.add("on"); renderTasks(); }); });
   document.querySelectorAll(".viewswitch button").forEach(function(b){ b.addEventListener("click",function(){ S.view=b.dataset.v; if(S.view==="calendar"){ if(!S.calMonth)S.calMonth=todayISO().slice(0,7); if(!S.calSel)S.calSel=todayISO(); } applyView(); if(S.view==="calendar") renderCalendar(); }); });
+  document.querySelectorAll("#adultTabs button").forEach(function(button){button.addEventListener("click",function(){S.adultTab=button.dataset.tab;applyAdultTab();window.scrollTo(0,0);});});
+  document.querySelectorAll("#kidTabs button").forEach(function(button){button.addEventListener("click",function(){S.kidTab=button.dataset.tab;applyKidTab();window.scrollTo(0,0);});});
   $("#clearDone").addEventListener("click",function(){ S.tasks=S.tasks.filter(function(t){return t.status!=="done";}); save(); renderAll(); });
 
   $("#openSettings").addEventListener("click",function(){ openUserSettings(current(),this); });
@@ -1735,6 +1855,7 @@
   $("#closeSettings").addEventListener("click",closeUserSettings);
   $("#settingsForm").addEventListener("submit",function(ev){
     ev.preventDefault(); if(!settingsTarget) return;
+    settingsTarget.icon=settingsIconChoice;
     S.userSettings[settingsTarget.id]={
       theme:$("#settingsTheme").value,
       density:$("#settingsDensity").value,
